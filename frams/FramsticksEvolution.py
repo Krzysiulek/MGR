@@ -4,12 +4,12 @@ import numpy as np
 import os
 import sys
 from datetime import datetime
-from deap import creator, base, tools, algorithms
+from deap import creator, tools, base
+
+# do modyfikacji. Wzięte z deap'a
+from mydeap import algorithms
 
 from FramsticksLib import FramsticksLib
-
-
-# Note: this may be less efficient than running the evolution directly in Framsticks, so if performance is key, compare both options.
 
 
 def genotype_within_constraint(genotype, dict_criteria_values, criterion_name, constraint_value):
