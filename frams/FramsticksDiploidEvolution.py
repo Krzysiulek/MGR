@@ -1,28 +1,15 @@
 import argparse
 import json
-import numpy as np
-import os
 import sys
 from datetime import datetime
+
+import numpy as np
 from deap import creator, tools, base
 
 # do modyfikacji. Wzięte z deap'a
-from mydeap import algorithms
-
+from FramsticksEvolutionCommon import genotype_within_constraint, parseArguments
 from FramsticksLib import FramsticksLib
-
-
-def genotype_within_constraint(genotype, dict_criteria_values, criterion_name, constraint_value):
-    REPORT_CONSTRAINT_VIOLATIONS = False
-    if constraint_value is not None:
-        actual_value = dict_criteria_values[criterion_name]
-        if actual_value > constraint_value:
-            if REPORT_CONSTRAINT_VIOLATIONS:
-                print(
-                    'Genotype "%s" assigned low fitness because it violates constraint "%s": %s exceeds threshold %s' % (
-                    genotype, criterion_name, actual_value, constraint_value))
-            return False
-    return True
+from mydeap import algorithms
 
 
 def frams_evaluate(frams_cli, individual):
@@ -42,7 +29,7 @@ def frams_evaluate(frams_cli, individual):
             TypeError) as e:  # the evaluation may have failed for an invalid genotype (such as X[@][@] with "Don't simulate genotypes with warnings" option) or for some other reason
         valid = False
         print('Problem "%s" so could not evaluate genotype "%s", hence assigned it low fitness: %s' % (
-        str(e), genotype, BAD_FITNESS))
+            str(e), genotype, BAD_FITNESS))
     if valid:
         default_evaluation_data['numgenocharacters'] = len(genotype)  # for consistent constraint checking below
         valid &= genotype_within_constraint(genotype, default_evaluation_data, 'numparts', parsed_args.max_numparts)
@@ -103,50 +90,6 @@ def prepareToolbox(frams_cli, tournament_size, genetic_format, initial_genotype)
     return toolbox
 
 
-def parseArguments(canSkipRequired=False):
-    parser = argparse.ArgumentParser(
-        description='Run this program with "python -u %s" if you want to disable buffering of its output.' % sys.argv[
-            0])
-    parser.add_argument('-path', type=ensureDir, required=True and canSkipRequired,
-                        help='Path to Framsticks CLI without trailing slash.')
-    parser.add_argument('-lib', required=False,
-                        help='Library name. If not given, "frams-objects.dll" or "frams-objects.so" is assumed depending on the platform.')
-    parser.add_argument('-sim', required=False, default="eval-allcriteria.sim",
-                        help="The name of the .sim file with settings for evaluation, mutation, crossover, and similarity estimation. If not given, \"eval-allcriteria.sim\" is assumed by default. Must be compatible with the \"standard-eval\" expdef. If you want to provide more files, separate them with a semicolon ';'.")
-
-    parser.add_argument('-genformat', required=False,
-                        help='Genetic format for the simplest initial genotype, for example 4, 9, or B. If not given, f1 is assumed.')
-    parser.add_argument('-initialgenotype', required=False,
-                        help='The genotype used to seed the initial population. If given, the -genformat argument is ignored.')
-
-    parser.add_argument('-opt', required=True and canSkipRequired,
-                        help='optimization criteria: vertpos, velocity, distance, vertvel, lifespan, numjoints, numparts, numneurons, numconnections (or other as long as it is provided by the .sim file and its .expdef). For multiple criteria optimization, separate the names by the comma.')
-    parser.add_argument('-popsize', type=int, default=50, help="Population size, default: 50.")
-    parser.add_argument('-generations', type=int, default=5, help="Number of generations, default: 5.")
-    parser.add_argument('-tournament', type=int, default=5, help="Tournament size, default: 5.")
-    parser.add_argument('-pmut', type=float, default=0.9, help="Probability of mutation, default: 0.9")
-    parser.add_argument('-pxov', type=float, default=0.2, help="Probability of crossover, default: 0.2")
-    parser.add_argument('-hof_size', type=int, default=10, help="Number of genotypes in Hall of Fame. Default: 10.")
-    parser.add_argument('-hof_savefile', required=False,
-                        help='If set, Hall of Fame will be saved in Framsticks file format (recommended extension *.gen).')
-
-    parser.add_argument('-max_numparts', type=int, default=None, help="Maximum number of Parts. Default: no limit")
-    parser.add_argument('-max_numjoints', type=int, default=None, help="Maximum number of Joints. Default: no limit")
-    parser.add_argument('-max_numneurons', type=int, default=None, help="Maximum number of Neurons. Default: no limit")
-    parser.add_argument('-max_numconnections', type=int, default=None,
-                        help="Maximum number of Neural connections. Default: no limit")
-    parser.add_argument('-max_numgenochars', type=int, default=None,
-                        help="Maximum number of characters in genotype (including the format prefix, if any). Default: no limit")
-    return parser.parse_args()
-
-
-def ensureDir(string):
-    if os.path.isdir(string):
-        return string
-    else:
-        raise NotADirectoryError(string)
-
-
 def save_genotypes(filename, OPTIMIZATION_CRITERIA, hof):
     from framsfiles import writer as framswriter
     with open(filename, "w") as outfile:
@@ -193,10 +136,19 @@ def append_logs(logs, logs_to_append):
     return logs
 
 
+def duplicateIndividuals(population):
+    for individual in population:
+        individual.append(individual[0])
+    return population
+
+
 if __name__ == "__main__":
     # random.seed(123)  # see FramsticksLib.DETERMINISTIC below, set to True if you want full determinism
     FramsticksLib.DETERMINISTIC = False  # must be set before FramsticksLib() constructor call
-    parsed_args = parseArguments()
+    parser = argparse.ArgumentParser(
+        description='Run this program with "python -u %s" if you want to disable buffering of its output.' % sys.argv[
+            0])
+    parsed_args = parseArguments(parser=parser)
     print("Argument values:", ", ".join(['%s=%s' % (arg, getattr(parsed_args, arg)) for arg in vars(parsed_args)]))
 
     OPTIMIZATION_CRITERIA = parsed_args.opt.split(",")
@@ -207,6 +159,8 @@ if __name__ == "__main__":
                              parsed_args.initialgenotype)
 
     pop = toolbox.population(n=parsed_args.popsize)
+    pop = duplicateIndividuals(pop)
+
     hof = tools.HallOfFame(parsed_args.hof_size)
     stats = tools.Statistics(lambda ind: ind.fitness.values)
     stats.register("avg", np.mean)
