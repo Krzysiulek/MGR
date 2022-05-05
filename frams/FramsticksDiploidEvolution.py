@@ -13,8 +13,7 @@ from mydeap import algorithms
 
 
 def frams_evaluate(frams_cli, individual):
-    BAD_FITNESS = [-1] * len(
-        OPTIMIZATION_CRITERIA)  # fitness of -1 is intended to discourage further propagation of this genotype via selection ("this genotype is very poor")
+    BAD_FITNESS = [-1] * len(OPTIMIZATION_CRITERIA)  # fitness of -1 is intended to discourage further propagation of this genotype via selection ("this genotype is very poor")
     genotype = individual[
         0]  # individual[0] because we can't (?) have a simple str as a deap genotype/individual, only list of str.
     data = frams_cli.evaluate([genotype])
@@ -55,9 +54,10 @@ def frams_crossover(frams_cli, individual1, individual2):
 
 
 def frams_mutate(frams_cli, individual):
-    individual[0] = frams_cli.mutate([individual[0]])[
-        0]  # individual[0] because we can't (?) have a simple str as a deap genotype/individual, only list of str.
-    return individual,
+    # todo mutacja dla diploidów
+    individual[0] = frams_cli.mutate([individual[0]])[0]  # individual[0] because we can't (?) have a simple str as a deap genotype/individual, only list of str.
+    individual[1] = frams_cli.mutate([individual[1]])[0]  # individual[0] because we can't (?) have a simple str as a deap genotype/individual, only list of str.
+    return individual
 
 
 def frams_getsimplest(frams_cli, genetic_format, initial_genotype):
@@ -72,12 +72,6 @@ def prepareToolbox(frams_cli, tournament_size, genetic_format, initial_genotype)
     toolbox = base.Toolbox()
     toolbox.register("attr_simplest_genotype", frams_getsimplest, frams_cli, genetic_format,
                      initial_genotype)  # "Attribute generator"
-    # (failed) struggle to have an individual which is a simple str, not a list of str
-    # toolbox.register("individual", tools.initRepeat, creator.Individual, toolbox.attr_frams)
-    # https://stackoverflow.com/questions/51451815/python-deap-library-using-random-words-as-individuals
-    # https://github.com/DEAP/deap/issues/339
-    # https://gitlab.com/santiagoandre/deap-customize-population-example/-/blob/master/AGbasic.py
-    # https://groups.google.com/forum/#!topic/deap-users/22g1kyrpKy8
     toolbox.register("individual", tools.initRepeat, creator.Individual, toolbox.attr_simplest_genotype, 1)
     toolbox.register("population", tools.initRepeat, list, toolbox.individual)
     toolbox.register("evaluate", frams_evaluate, frams_cli)

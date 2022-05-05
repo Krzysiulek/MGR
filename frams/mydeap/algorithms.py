@@ -78,8 +78,16 @@ def varAnd(population, toolbox, cxpb, mutpb):
     # mutacja
     for i in range(len(offspring)):
         if random.random() < mutpb:
-            offspring[i], = toolbox.mutate(offspring[i])
-            del offspring[i].fitness.values
+
+            try:
+                mutated = toolbox.mutate(offspring[i])
+                for idx, ind in enumerate(mutated):
+                    offspring[i][idx] = ind
+            except Exception as e:
+                print(e)
+
+            if hasattr(offspring[i], 'fitness') and hasattr(offspring[i].fitness, 'values') and len(offspring[i].fitness.values) > 0:
+                del offspring[i].fitness.values
 
     return offspring
 

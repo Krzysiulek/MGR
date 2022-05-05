@@ -55,9 +55,8 @@ def frams_crossover(frams_cli, individual1, individual2):
 
 
 def frams_mutate(frams_cli, individual):
-    individual[0] = frams_cli.mutate([individual[0]])[
-        0]  # individual[0] because we can't (?) have a simple str as a deap genotype/individual, only list of str.
-    return individual,
+    individual[0] = frams_cli.mutate([individual[0]])[0]  # individual[0] because we can't (?) have a simple str as a deap genotype/individual, only list of str.
+    return individual
 
 
 def frams_getsimplest(frams_cli, genetic_format, initial_genotype):
