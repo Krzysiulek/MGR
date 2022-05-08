@@ -10,9 +10,10 @@ from deap import creator, tools, base
 from FramsticksEvolutionCommon import genotype_within_constraint, parseArguments
 from FramsticksLib import FramsticksLib
 from mydeap import algorithms
+import random
 
 
-def frams_evaluate(frams_cli, individual):
+def frams_evaluate(frams_cli, OPTIMIZATION_CRITERIA, parsed_args, individual):
     BAD_FITNESS = [-1] * len(OPTIMIZATION_CRITERIA)  # fitness of -1 is intended to discourage further propagation of this genotype via selection ("this genotype is very poor")
     genotype = individual[
         0]  # individual[0] because we can't (?) have a simple str as a deap genotype/individual, only list of str.
@@ -64,7 +65,7 @@ def frams_getsimplest(frams_cli, genetic_format, initial_genotype):
     return initial_genotype if initial_genotype is not None else frams_cli.getSimplest(genetic_format)
 
 
-def prepareToolbox(frams_cli, tournament_size, genetic_format, initial_genotype):
+def prepareToolbox(frams_cli, tournament_size, genetic_format, initial_genotype, OPTIMIZATION_CRITERIA, parsed_args):
     creator.create("FitnessMax", base.Fitness, weights=[1.0] * len(OPTIMIZATION_CRITERIA))
     creator.create("Individual", list,
                    fitness=creator.FitnessMax)  # would be nice to have "str" instead of unnecessary "list of str"
@@ -74,7 +75,7 @@ def prepareToolbox(frams_cli, tournament_size, genetic_format, initial_genotype)
                      initial_genotype)  # "Attribute generator"
     toolbox.register("individual", tools.initRepeat, creator.Individual, toolbox.attr_simplest_genotype, 1)
     toolbox.register("population", tools.initRepeat, list, toolbox.individual)
-    toolbox.register("evaluate", frams_evaluate, frams_cli)
+    toolbox.register("evaluate", frams_evaluate, frams_cli, OPTIMIZATION_CRITERIA, parsed_args)
     toolbox.register("mate", frams_crossover, frams_cli)
     toolbox.register("mutate", frams_mutate, frams_cli)
     if len(OPTIMIZATION_CRITERIA) <= 1:
@@ -135,22 +136,21 @@ def duplicateIndividuals(population):
         individual.append(individual[0])
     return population
 
-
-if __name__ == "__main__":
-    # random.seed(123)  # see FramsticksLib.DETERMINISTIC below, set to True if you want full determinism
-    FramsticksLib.DETERMINISTIC = False  # must be set before FramsticksLib() constructor call
-    parser = argparse.ArgumentParser(
-        description='Run this program with "python -u %s" if you want to disable buffering of its output.' % sys.argv[
-            0])
-    parsed_args = parseArguments(parser=parser)
-    print("Argument values:", ", ".join(['%s=%s' % (arg, getattr(parsed_args, arg)) for arg in vars(parsed_args)]))
+def run(parsed_args, deterministic=False):
+    if deterministic is True:
+        random.seed(123)
+        FramsticksLib.DETERMINISTIC = True
+    else:
+        FramsticksLib.DETERMINISTIC = False
 
     OPTIMIZATION_CRITERIA = parsed_args.opt.split(",")
     framsLib = FramsticksLib(parsed_args.path, parsed_args.lib, parsed_args.sim.split(";"))
 
     toolbox = prepareToolbox(framsLib, parsed_args.tournament,
                              '1' if parsed_args.genformat is None else parsed_args.genformat,
-                             parsed_args.initialgenotype)
+                             parsed_args.initialgenotype,
+                             OPTIMIZATION_CRITERIA=OPTIMIZATION_CRITERIA,
+                             parsed_args=parsed_args)
 
     pop = toolbox.population(n=parsed_args.popsize)
     pop = duplicateIndividuals(pop)
@@ -194,3 +194,16 @@ if __name__ == "__main__":
     now = datetime.now().strftime("%d-%m-%Y-%H-%M-%S")
     with open(f'data/train_{now}.json', 'w') as fout:
         json.dump(list_to_save, fout)
+
+
+if __name__ == "__main__":
+    # random.seed(123)  # see FramsticksLib.DETERMINISTIC below, set to True if you want full determinism
+    FramsticksLib.DETERMINISTIC = False  # must be set before FramsticksLib() constructor call
+    parser = argparse.ArgumentParser(
+        description='Run this program with "python -u %s" if you want to disable buffering of its output.' % sys.argv[
+            0])
+    parsed_args = parseArguments(parser=parser)
+    print("Argument values:", ", ".join(['%s=%s' % (arg, getattr(parsed_args, arg)) for arg in vars(parsed_args)]))
+
+    run(parsed_args=parsed_args)
+

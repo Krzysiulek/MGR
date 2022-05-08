@@ -1,1 +1,18 @@
-# TODO: plik, który odpala oba
+import FramsticksHaploidEvolution as haploid
+import FramsticksDiploidEvolution as diploid
+from FramsticksEvolutionCommon import parseArguments
+import argparse
+import sys
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(
+        description='Run this program with "python -u %s" if you want to disable buffering of its output.' % sys.argv[
+            0])
+    parsed_args = parseArguments(parser=parser)
+    print("Argument values:", ", ".join(['%s=%s' % (arg, getattr(parsed_args, arg)) for arg in vars(parsed_args)]))
+
+    print(f"Running haploid")
+    haploid.run(parsed_args=parsed_args, deterministic=False)
+    print(f"Running diploid")
+    diploid.run(parsed_args=parsed_args, deterministic=False)
