@@ -1,20 +1,20 @@
 import argparse
-import json
+import random
 import sys
-from datetime import datetime
 
 import numpy as np
 from deap import creator, tools, base
-import random
 
 # do modyfikacji. Wzięte z deap'a
-from FramsticksEvolutionCommon import genotype_within_constraint, parseArguments, get_seed
+from FramsticksEvolutionCommon import genotype_within_constraint, parseArguments, get_seed, has_reached_iters_limits, \
+    save_logs
 from FramsticksLib import FramsticksLib
 from mydeap import algorithms
 
 
 def frams_evaluate(frams_cli, OPTIMIZATION_CRITERIA, parsed_args, individual):
-    BAD_FITNESS = [-1] * len(OPTIMIZATION_CRITERIA)  # fitness of -1 is intended to discourage further propagation of this genotype via selection ("this genotype is very poor")
+    BAD_FITNESS = [-1] * len(
+        OPTIMIZATION_CRITERIA)  # fitness of -1 is intended to discourage further propagation of this genotype via selection ("this genotype is very poor")
     genotype = individual[
         0]  # individual[0] because we can't (?) have a simple str as a deap genotype/individual, only list of str.
     data = frams_cli.evaluate([genotype])
@@ -55,7 +55,8 @@ def frams_crossover(frams_cli, individual1, individual2):
 
 
 def frams_mutate(frams_cli, individual):
-    individual[0] = frams_cli.mutate([individual[0]])[0]  # individual[0] because we can't (?) have a simple str as a deap genotype/individual, only list of str.
+    individual[0] = frams_cli.mutate([individual[0]])[
+        0]  # individual[0] because we can't (?) have a simple str as a deap genotype/individual, only list of str.
     return individual
 
 
@@ -124,7 +125,8 @@ def append_logs(logs, logs_to_append):
 
     return logs
 
-def run(parsed_args, deterministic=False):
+
+def run(parsed_args, deterministic=False, max_iters_limit=None):
     random.seed(get_seed(deterministic))
     FramsticksLib.DETERMINISTIC = deterministic
 
@@ -148,8 +150,13 @@ def run(parsed_args, deterministic=False):
     hof_fitness = get_max_in_hof(hof)
 
     still_improving = True
+    reached_iters_limit = False
     log = []
-    while (still_improving):
+    iters = 0
+    while (still_improving and not reached_iters_limit):
+        iters += 1
+        reached_iters_limit = has_reached_iters_limits(limit=max_iters_limit, current_iter=iters)
+
         pop, tmp_log = algorithms.eaSimple(pop, toolbox, cxpb=parsed_args.pxov, mutpb=parsed_args.pmut,
                                            ngen=parsed_args.generations, stats=stats, halloffame=hof, verbose=True)
         log = append_logs(log, tmp_log)  # TODO: przepisywać logi
@@ -166,26 +173,15 @@ def run(parsed_args, deterministic=False):
     if parsed_args.hof_savefile is not None:
         save_genotypes(parsed_args.hof_savefile, OPTIMIZATION_CRITERIA, hof)
 
-    trained_pop_num = 0
-    list_to_save = []
-    for i in range(len(log)):
-        trained_pop_num += parsed_args.popsize
-        dict_log = log[i]
-        dict_log['trained_pop'] = trained_pop_num
-        list_to_save.append(dict_log)
-
-    now = datetime.now().strftime("%d-%m-%Y-%H-%M-%S")
-    with open(f'data/train_{now}.json', 'w') as fout:
-        json.dump(list_to_save, fout)
-
-    return get_max_in_hof(hof)
+    save_logs(log=log, popsize=parsed_args.popsize)
+    return get_max_in_hof(hof), iters
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description='Run this program with "python -u %s" if you want to disable buffering of its output.' % sys.argv[0])
+    parser = argparse.ArgumentParser(
+        description='Run this program with "python -u %s" if you want to disable buffering of its output.' % sys.argv[
+            0])
     parsed_args = parseArguments(parser=parser)
     print("Argument values:", ", ".join(['%s=%s' % (arg, getattr(parsed_args, arg)) for arg in vars(parsed_args)]))
 
     run(parsed_args=parsed_args)
-
-

@@ -1,4 +1,4 @@
-Żeby odpalić FramsicksEvolution.py
+# Żeby odpalić FramsicksEvolution.py
 
 Parametry:
 ```bash
@@ -9,3 +9,14 @@ Environment Variables:
 ```bash
 PYTHONUNBUFFERED=1;DIR_WITH_FRAMS_LIBRARY=C:\Users\Lenovo\OneDrive\Pulpit\MGR\Framsticks50rc20
 ```
+
+# Pomysły na pracę:
+- testy dla kilku różnych reprezentacji
+- testy dla małych pop-size
+- testy dla dużych pop-size
+- testy na zbiezność
+- Przystosowanie pod szybkość
+- Przystosowanie pod konkretny kształt
+- Wyjaśnienie co to jest Framstik
+- Dla każdego eksperymentu, odpalić framsticka i wkleić jego zdjęcie
+- Różne architektury - eaSimple / eaMuPlusLambda / eaMuCommaLambda / eaGenerateUpdate

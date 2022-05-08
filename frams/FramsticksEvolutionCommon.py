@@ -1,5 +1,6 @@
 import os
-
+import json
+from datetime import datetime
 
 def genotype_within_constraint(genotype, dict_criteria_values, criterion_name, constraint_value):
     REPORT_CONSTRAINT_VIOLATIONS = False
@@ -23,6 +24,47 @@ def ensureDir(string):
 
 def get_seed(deterministic):
     return 123 if deterministic else None
+
+def get_metadata(pop_size):
+    return {
+        "type": "haploid",
+        "population_size": pop_size
+    }
+
+def get_population_logs(log, popsize):
+    trained_pop_num = 0
+    list_to_save = []
+
+    hof = -99
+    for i in range(len(log)):
+        trained_pop_num += popsize
+        dict_log = log[i]
+        dict_log['trained_pop'] = trained_pop_num
+
+        if dict_log['max'] > hof:
+            hof = dict_log['max']
+
+        dict_log['hof_fitness'] = hof
+
+        list_to_save.append(dict_log)
+
+    return list_to_save
+
+def save_logs(log, popsize):
+    dict_to_save = {}
+    dict_to_save["metadata"] = get_metadata(pop_size=popsize)
+    dict_to_save["logs"] = get_population_logs(log, popsize)
+
+    now = datetime.now().strftime("%d-%m-%Y-%H-%M-%S")
+    with open(f'data/train_{now}.json', 'w') as fout:
+        json.dump(dict_to_save, fout)
+
+
+def has_reached_iters_limits(limit, current_iter):
+    if limit is None:
+        return False
+
+    return current_iter >= limit
 
 
 def parseArguments(parser, canSkipRequired=False):
