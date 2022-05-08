@@ -21,6 +21,10 @@ def ensureDir(string):
         raise NotADirectoryError(string)
 
 
+def get_seed(deterministic):
+    return 123 if deterministic else None
+
+
 def parseArguments(parser, canSkipRequired=False):
     parser.add_argument('-path', type=ensureDir, required=True and canSkipRequired,
                         help='Path to Framsticks CLI without trailing slash.')

@@ -8,7 +8,7 @@ from deap import creator, tools, base
 import random
 
 # do modyfikacji. Wzięte z deap'a
-from FramsticksEvolutionCommon import genotype_within_constraint, parseArguments
+from FramsticksEvolutionCommon import genotype_within_constraint, parseArguments, get_seed
 from FramsticksLib import FramsticksLib
 from mydeap import algorithms
 
@@ -31,7 +31,6 @@ def frams_evaluate(frams_cli, OPTIMIZATION_CRITERIA, parsed_args, individual):
         print('Problem "%s" so could not evaluate genotype "%s", hence assigned it low fitness: %s' % (
             str(e), genotype, BAD_FITNESS))
     if valid:
-        # TODO: nie ma tu parsed_args
         default_evaluation_data['numgenocharacters'] = len(genotype)  # for consistent constraint checking below
         valid &= genotype_within_constraint(genotype, default_evaluation_data, 'numparts', parsed_args.max_numparts)
         valid &= genotype_within_constraint(genotype, default_evaluation_data, 'numjoints', parsed_args.max_numjoints)
@@ -98,10 +97,6 @@ def save_genotypes(filename, OPTIMIZATION_CRITERIA, hof):
     print("Saved '%s' (%d)" % (filename, len(hof)))
 
 
-def get_my_own_settings(parsed_arguments):
-    return parsed_arguments
-
-
 def print_best_individuals(hof):
     print('Best individuals:')
     for ind in hof:
@@ -130,11 +125,8 @@ def append_logs(logs, logs_to_append):
     return logs
 
 def run(parsed_args, deterministic=False):
-    if deterministic is True:
-        random.seed(123)
-        FramsticksLib.DETERMINISTIC = True
-    else:
-        FramsticksLib.DETERMINISTIC = False
+    random.seed(get_seed(deterministic))
+    FramsticksLib.DETERMINISTIC = deterministic
 
     OPTIMIZATION_CRITERIA = parsed_args.opt.split(",")
     framsLib = FramsticksLib(parsed_args.path, parsed_args.lib, parsed_args.sim.split(";"))
@@ -186,12 +178,14 @@ def run(parsed_args, deterministic=False):
     with open(f'data/train_{now}.json', 'w') as fout:
         json.dump(list_to_save, fout)
 
+    return get_max_in_hof(hof)
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Run this program with "python -u %s" if you want to disable buffering of its output.' % sys.argv[0])
     parsed_args = parseArguments(parser=parser)
     print("Argument values:", ", ".join(['%s=%s' % (arg, getattr(parsed_args, arg)) for arg in vars(parsed_args)]))
 
-    run(parsed_args)
+    run(parsed_args=parsed_args)
 
 

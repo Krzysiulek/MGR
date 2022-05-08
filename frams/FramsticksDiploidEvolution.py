@@ -5,12 +5,12 @@ from datetime import datetime
 
 import numpy as np
 from deap import creator, tools, base
+import random
 
 # do modyfikacji. Wzięte z deap'a
-from FramsticksEvolutionCommon import genotype_within_constraint, parseArguments
+from FramsticksEvolutionCommon import genotype_within_constraint, parseArguments, get_seed
 from FramsticksLib import FramsticksLib
 from mydeap import algorithms
-import random
 
 
 def frams_evaluate(frams_cli, OPTIMIZATION_CRITERIA, parsed_args, individual):
@@ -55,7 +55,6 @@ def frams_crossover(frams_cli, individual1, individual2):
 
 
 def frams_mutate(frams_cli, individual):
-    # todo mutacja dla diploidów
     individual[0] = frams_cli.mutate([individual[0]])[0]  # individual[0] because we can't (?) have a simple str as a deap genotype/individual, only list of str.
     individual[1] = frams_cli.mutate([individual[1]])[0]  # individual[0] because we can't (?) have a simple str as a deap genotype/individual, only list of str.
     return individual
@@ -99,10 +98,6 @@ def save_genotypes(filename, OPTIMIZATION_CRITERIA, hof):
     print("Saved '%s' (%d)" % (filename, len(hof)))
 
 
-def get_my_own_settings(parsed_arguments):
-    return parsed_arguments
-
-
 def print_best_individuals(hof):
     print('Best individuals:')
     for ind in hof:
@@ -137,11 +132,8 @@ def duplicateIndividuals(population):
     return population
 
 def run(parsed_args, deterministic=False):
-    if deterministic is True:
-        random.seed(123)
-        FramsticksLib.DETERMINISTIC = True
-    else:
-        FramsticksLib.DETERMINISTIC = False
+    random.seed(get_seed(deterministic))
+    FramsticksLib.DETERMINISTIC = deterministic
 
     OPTIMIZATION_CRITERIA = parsed_args.opt.split(",")
     framsLib = FramsticksLib(parsed_args.path, parsed_args.lib, parsed_args.sim.split(";"))
@@ -195,13 +187,11 @@ def run(parsed_args, deterministic=False):
     with open(f'data/train_{now}.json', 'w') as fout:
         json.dump(list_to_save, fout)
 
+    return get_max_in_hof(hof)
+
 
 if __name__ == "__main__":
-    # random.seed(123)  # see FramsticksLib.DETERMINISTIC below, set to True if you want full determinism
-    FramsticksLib.DETERMINISTIC = False  # must be set before FramsticksLib() constructor call
-    parser = argparse.ArgumentParser(
-        description='Run this program with "python -u %s" if you want to disable buffering of its output.' % sys.argv[
-            0])
+    parser = argparse.ArgumentParser(description='Run this program with "python -u %s" if you want to disable buffering of its output.' % sys.argv[0])
     parsed_args = parseArguments(parser=parser)
     print("Argument values:", ", ".join(['%s=%s' % (arg, getattr(parsed_args, arg)) for arg in vars(parsed_args)]))
 
