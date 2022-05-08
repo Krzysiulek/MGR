@@ -1,9 +1,9 @@
-import FramsticksHaploidEvolution as haploid
-import FramsticksDiploidEvolution as diploid
-from FramsticksEvolutionCommon import parseArguments
 import argparse
 import sys
 
+import FramsticksDiploidEvolution as diploid
+import FramsticksHaploidEvolution as haploid
+from FramsticksEvolutionCommon import parseArguments
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
