@@ -1,5 +1,6 @@
 import os
 import json
+import time
 from datetime import datetime
 
 def genotype_within_constraint(genotype, dict_criteria_values, criterion_name, constraint_value):
@@ -14,6 +15,14 @@ def genotype_within_constraint(genotype, dict_criteria_values, criterion_name, c
             return False
     return True
 
+def reproduce_hof(hof, population):
+    if len(hof) <= 0:
+        return population
+
+    for i in range(int(len(population) / 2)):
+        population[i] = hof.items[0]
+
+    return population
 
 def ensureDir(string):
     if os.path.isdir(string):
@@ -21,14 +30,50 @@ def ensureDir(string):
     else:
         raise NotADirectoryError(string)
 
+def get_time_from_start(arg, arg2):
+    return time.time() - arg
+
+def append_logs(logs, logs_to_append):
+    if len(logs) > 0:
+        max_gen = logs[len(logs) - 1]["gen"]
+    else:
+        max_gen = 0
+
+    for log in logs_to_append:
+        max_gen += 1
+        log["gen"] = max_gen
+        logs.append(log)
+
+    return logs
 
 def get_seed(deterministic):
     return 123 if deterministic else None
 
-def get_metadata(pop_size):
+def get_hof_info(hof, optimization_criteria):
+    keyval_list = []
+    for ind in hof:
+        keyval = {}
+
+        for i, k in enumerate(optimization_criteria):  # construct a dictionary with criteria names and their values
+            # TODO it would be better to save in Individual (after evaluation) all fields returned by Framsticks, and get these fields here, not just the criteria that were actually used as fitness in evolution.
+            keyval[k] = ind.fitness.values[i]
+
+        keyval["genotype"] = ind
+        keyval_list.append(keyval)
+    return keyval_list
+
+def get_max_in_hof(hof):
+    max_hof = 0
+    for ind in hof:
+        if max_hof < max(ind.fitness.values):
+            max_hof = max(ind.fitness.values)
+    return max_hof
+
+def get_metadata(pop_size=0, type="", hof=None, optimization_criteria=None):
     return {
-        "type": "haploid",
-        "population_size": pop_size
+        "type": type,
+        "population_size": pop_size,
+        "hof": get_hof_info(hof=hof, optimization_criteria=optimization_criteria)
     }
 
 def get_population_logs(log, popsize):
@@ -50,13 +95,13 @@ def get_population_logs(log, popsize):
 
     return list_to_save
 
-def save_logs(log, popsize):
+def save_logs(log, popsize, type="", hof=None, optimization_criteria=None, experiment_start_time=datetime.now()):
     dict_to_save = {}
-    dict_to_save["metadata"] = get_metadata(pop_size=popsize)
+    dict_to_save["metadata"] = get_metadata(pop_size=popsize, type=type, hof=hof, optimization_criteria=optimization_criteria)
     dict_to_save["logs"] = get_population_logs(log, popsize)
 
-    now = datetime.now().strftime("%d-%m-%Y-%H-%M-%S")
-    with open(f'data/train_{now}.json', 'w') as fout:
+    now = experiment_start_time.strftime("%d-%m-%Y-%H-%M-%S")
+    with open(f'data/train_{now}_{type}.json', 'w') as fout:
         json.dump(dict_to_save, fout)
 
 
@@ -65,6 +110,15 @@ def has_reached_iters_limits(limit, current_iter):
         return False
 
     return current_iter >= limit
+
+def should_continue_simulation(current_iter, max_limit, min_limit, is_improving):
+    if min_limit is not None and min_limit > current_iter:
+        return True
+
+    if max_limit is not None and current_iter >= max_limit:
+        return False
+
+    return is_improving
 
 
 def parseArguments(parser, canSkipRequired=False):

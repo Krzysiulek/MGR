@@ -7,9 +7,10 @@ from deap import creator, tools, base
 
 # do modyfikacji. Wzięte z deap'a
 from FramsticksEvolutionCommon import genotype_within_constraint, parseArguments, get_seed, has_reached_iters_limits, \
-    save_logs
+    save_logs, should_continue_simulation, append_logs, get_max_in_hof, get_time_from_start, reproduce_hof
 from FramsticksLib import FramsticksLib
 from mydeap import algorithms
+import time
 
 
 def frams_evaluate(frams_cli, OPTIMIZATION_CRITERIA, parsed_args, individual):
@@ -104,29 +105,8 @@ def print_best_individuals(hof):
         print(ind.fitness, '\t-->\t', ind[0])
 
 
-def get_max_in_hof(hof):
-    max = 0
-    for ind in hof:
-        if max < ind.fitness.values[0]:
-            max = ind.fitness.values[0]
-    return max
 
-
-def append_logs(logs, logs_to_append):
-    if len(logs) > 0:
-        max_gen = logs[len(logs) - 1]["gen"]
-    else:
-        max_gen = 0
-
-    for log in logs_to_append:
-        max_gen += 1
-        log["gen"] = max_gen
-        logs.append(log)
-
-    return logs
-
-
-def run(parsed_args, deterministic=False, max_iters_limit=None):
+def run(parsed_args, deterministic=False, max_iters_limit=None, min_iters_limit=None, experiment_start_time=None):
     random.seed(get_seed(deterministic))
     FramsticksLib.DETERMINISTIC = deterministic
 
@@ -146,17 +126,16 @@ def run(parsed_args, deterministic=False, max_iters_limit=None):
     stats.register("stddev", np.std)
     stats.register("min", np.min)
     stats.register("max", np.max)
+    stats.register("time", get_time_from_start, time.time())
 
     hof_fitness = get_max_in_hof(hof)
 
-    still_improving = True
-    reached_iters_limit = False
+    should_continue = True
     log = []
     iters = 0
-    while (still_improving and not reached_iters_limit):
+    while (should_continue):
         iters += 1
-        reached_iters_limit = has_reached_iters_limits(limit=max_iters_limit, current_iter=iters)
-
+        pop = reproduce_hof(hof=hof, population=pop)
         pop, tmp_log = algorithms.eaSimple(pop, toolbox, cxpb=parsed_args.pxov, mutpb=parsed_args.pmut,
                                            ngen=parsed_args.generations, stats=stats, halloffame=hof, verbose=True)
         log = append_logs(log, tmp_log)  # TODO: przepisywać logi
@@ -165,15 +144,26 @@ def run(parsed_args, deterministic=False, max_iters_limit=None):
             hof_fitness = get_max_in_hof(hof)
             print(f"Still improving. Max={get_max_in_hof(hof)}. Hof={hof}")
             print(hof)
+            still_improving = True
         else:
             still_improving = False
+
+        should_continue = should_continue_simulation(current_iter=iters,
+                                                     max_limit=max_iters_limit,
+                                                     min_limit=min_iters_limit,
+                                                     is_improving=still_improving)
+        save_logs(log=log,
+                  popsize=parsed_args.popsize,
+                  type="Haploid",
+                  hof=hof,
+                  optimization_criteria=OPTIMIZATION_CRITERIA,
+                  experiment_start_time=experiment_start_time)
 
     print_best_individuals(hof)
 
     if parsed_args.hof_savefile is not None:
         save_genotypes(parsed_args.hof_savefile, OPTIMIZATION_CRITERIA, hof)
 
-    save_logs(log=log, popsize=parsed_args.popsize)
     return get_max_in_hof(hof), iters
 
 
