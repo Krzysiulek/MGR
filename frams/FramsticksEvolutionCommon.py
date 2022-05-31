@@ -2,6 +2,9 @@ import os
 import json
 import time
 from datetime import datetime
+import random
+import os
+
 
 def genotype_within_constraint(genotype, dict_criteria_values, criterion_name, constraint_value):
     REPORT_CONSTRAINT_VIOLATIONS = False
@@ -19,8 +22,20 @@ def reproduce_hof(hof, population):
     if len(hof) <= 0:
         return population
 
-    for i in range(int(len(population) / 2)):
+    changed = 0
+
+    random_genes_to_change = random.sample(range(0, len(population) - 1), int(len(population) / 5))
+
+    for i in random_genes_to_change:
         population[i] = hof.items[0]
+
+    for i in range(int(len(population))):
+        ind = population[i]
+
+        if max(ind.fitness.values) < get_max_in_hof(hof) / 2:
+            population[i] = hof.items[0]
+
+
 
     return population
 
@@ -32,6 +47,9 @@ def ensureDir(string):
 
 def get_time_from_start(arg, arg2):
     return time.time() - arg
+
+def get_type(type, arg):
+    return type
 
 def append_logs(logs, logs_to_append):
     if len(logs) > 0:
@@ -69,11 +87,26 @@ def get_max_in_hof(hof):
             max_hof = max(ind.fitness.values)
     return max_hof
 
-def get_metadata(pop_size=0, type="", hof=None, optimization_criteria=None):
+def get_metadata(pop_size=0,
+                 type="",
+                 hof=None,
+                 optimization_criteria=None,
+                 p_mut=None,
+                 p_cx=None,
+                 initial_genotype="",
+                 sim="",
+                 max_numgenochars=None,
+                 max_numparts=None):
     return {
         "type": type,
         "population_size": pop_size,
-        "hof": get_hof_info(hof=hof, optimization_criteria=optimization_criteria)
+        "hof": get_hof_info(hof=hof, optimization_criteria=optimization_criteria),
+        "p_mut": p_mut,
+        "p_cx": p_cx,
+        "initial_genotype": initial_genotype,
+        "sim": sim,
+        "max_numgenochars": max_numgenochars,
+        "max_numparts": max_numparts
     }
 
 def get_population_logs(log, popsize):
@@ -95,13 +128,38 @@ def get_population_logs(log, popsize):
 
     return list_to_save
 
-def save_logs(log, popsize, type="", hof=None, optimization_criteria=None, experiment_start_time=datetime.now()):
+def save_logs(log,
+              popsize,
+              type="",
+              hof=None,
+              optimization_criteria=None,
+              experiment_start_time=datetime.now(),
+              p_mut=None,
+              p_cx=None,
+              initial_genotype=None,
+              sim=None,
+              max_numgenochars=None,
+              max_numparts=None
+              ):
     dict_to_save = {}
-    dict_to_save["metadata"] = get_metadata(pop_size=popsize, type=type, hof=hof, optimization_criteria=optimization_criteria)
+    dict_to_save["metadata"] = get_metadata(pop_size=popsize,
+                                            type=type,
+                                            hof=hof,
+                                            optimization_criteria=optimization_criteria,
+                                            p_mut=p_mut,
+                                            p_cx=p_cx,
+                                            initial_genotype=initial_genotype,
+                                            sim=sim,
+                                            max_numgenochars=max_numgenochars,
+                                            max_numparts=max_numparts)
     dict_to_save["logs"] = get_population_logs(log, popsize)
 
     now = experiment_start_time.strftime("%d-%m-%Y-%H-%M-%S")
-    with open(f'data/train_{now}_{type}.json', 'w') as fout:
+    dir = f'data/pcx_{p_cx}_pmut_{p_mut}'
+    path = f'{dir}/train_{now}_{type}_pcx_{p_cx}_pmut_{p_mut}.json'
+
+    os.makedirs(dir, exist_ok=True)
+    with open(path, 'w') as fout:
         json.dump(dict_to_save, fout)
 
 

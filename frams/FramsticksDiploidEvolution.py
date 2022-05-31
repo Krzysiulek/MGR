@@ -8,7 +8,7 @@ import time
 
 # do modyfikacji. Wzięte z deap'a
 from FramsticksEvolutionCommon import genotype_within_constraint, parseArguments, get_seed, has_reached_iters_limits, \
-    save_logs, should_continue_simulation, append_logs, get_max_in_hof, get_time_from_start, reproduce_hof
+    save_logs, should_continue_simulation, append_logs, get_max_in_hof, get_time_from_start, reproduce_hof, get_type
 from FramsticksLib import FramsticksLib
 from mydeap import algorithms
 
@@ -142,7 +142,13 @@ def duplicateIndividuals(population):
         individual.append(individual[0])
     return population
 
-def run(parsed_args, deterministic=False, max_iters_limit=None, min_iters_limit=None, experiment_start_time=None):
+def run(parsed_args,
+        deterministic=False,
+        max_iters_limit=None,
+        min_iters_limit=None,
+        experiment_start_time=None,
+        p_mut=1,
+        p_cx=1):
     random.seed(get_seed(deterministic))
     FramsticksLib.DETERMINISTIC = deterministic
 
@@ -160,6 +166,7 @@ def run(parsed_args, deterministic=False, max_iters_limit=None, min_iters_limit=
 
     hof = tools.HallOfFame(parsed_args.hof_size)
     stats = tools.Statistics(lambda ind: ind.fitness.values)
+    stats.register("type", get_type, 'D')
     stats.register("avg", np.mean)
     stats.register("stddev", np.std)
     stats.register("min", np.min)
@@ -176,9 +183,15 @@ def run(parsed_args, deterministic=False, max_iters_limit=None, min_iters_limit=
         iters += 1
         print(f"Calculating Diploid. Iteration: {iters}")
 
-        pop, tmp_log = algorithms.eaSimple(pop, toolbox, cxpb=parsed_args.pxov, mutpb=parsed_args.pmut,
-                                           ngen=parsed_args.generations, stats=stats, halloffame=hof, verbose=True)
-        log = append_logs(log, tmp_log)  # TODO: przepisywać logi
+        pop, tmp_log = algorithms.eaSimple(population=pop,
+                                           toolbox=toolbox,
+                                           cxpb=p_cx,
+                                           mutpb=p_mut,
+                                           ngen=parsed_args.generations,
+                                           stats=stats,
+                                           halloffame=hof,
+                                           verbose=True)
+        log = append_logs(log, tmp_log)
 
         if (get_max_in_hof(hof) > hof_fitness):
             hof_fitness = get_max_in_hof(hof)
@@ -198,7 +211,13 @@ def run(parsed_args, deterministic=False, max_iters_limit=None, min_iters_limit=
                   type="Diploid",
                   hof=hof,
                   optimization_criteria=OPTIMIZATION_CRITERIA,
-                  experiment_start_time=experiment_start_time)
+                  experiment_start_time=experiment_start_time,
+                  p_mut=p_mut,
+                  p_cx=p_cx,
+                  initial_genotype=parsed_args.initialgenotype,
+                  sim=parsed_args.sim,
+                  max_numgenochars=parsed_args.max_numgenochars,
+                  max_numparts=parsed_args.max_numparts)
 
     print_best_individuals(hof)
 

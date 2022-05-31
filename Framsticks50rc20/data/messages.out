@@ -1,4 +1,17 @@
 VMNeuronManager.autoload: Neuro classes added: Delay Light Nn PIDP PIDV SeeLight SeeLight2 S0 S1 Thr 
 UserScripts.autoload: 19 user scripts added.
+VMNeuronManager.autoload: Neuro classes added: Delay Light Nn PIDP PIDV SeeLight SeeLight2 S0 S1 Thr 
+UserScripts.autoload: 19 user scripts added.
 MainProgram.Start: Application initialized
+Simulator.load: Loading from 'C:\Users\Lenovo\OneDrive\Pulpit\MGR\frams\eval-allcriteria.sim'
+Loader.load: Comments read from file follow:
+Loader.load:  Sample settings for evaluating many criteria of performance of a Framsticks creature.
+Loader.load:  See the "evalcount" parameter if you want to speed the evaluation up or have a more stable result.
+Loader.load:  Other important parameters are "Energy0" and "perfperiod".
+Loader.load:  Put this file in the "data" subdirectory within the Framsticks distribution.
+MainProgram.Start: Application initialized
+Simulator.load: Loading from 'C:\Users\Lenovo\OneDrive\Pulpit\MGR\frams\HoF-f9-%%M-%%N.gen'
+Simulator.load: 1 genotype(s) loaded from 'C:\Users\Lenovo\OneDrive\Pulpit\MGR\frams\HoF-f9-%%M-%%N.gen'
+Simulator.load: Settings loaded from 'C:\Users\Lenovo\OneDrive\Pulpit\MGR\frams\eval-allcriteria.sim'
+MainProgram.Finish: Application ends
 MainProgram.Finish: Application ends

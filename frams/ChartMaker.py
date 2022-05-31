@@ -90,8 +90,10 @@ def dual_chart(all_data_1,
 
 # todo: dodać z metadata infomracje
 
-file_1 = "train_25-05-2022-16-59-22_Diploid.json"
-file_2 = "train_25-05-2022-16-59-22_Haploid.json"
+
+file_1 = "pcx_1_pmut_1/train_30-05-2022-23-32-38_Diploid_pcx_1_pmut_1.json"
+file_2 = "pcx_1_pmut_1/train_30-05-2022-23-32-38_Haploid_pcx_1_pmut_1.json"
+
 
 # z std. dev
 f = open(f'data/{file_1}')
