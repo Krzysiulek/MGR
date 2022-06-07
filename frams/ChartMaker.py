@@ -94,24 +94,24 @@ def dual_chart(all_data_1,
 file_1 = "pcx_1_pmut_0.01/train_01-06-2022-10-29-01_Diploid_pcx_1_pmut_0.01.json"
 file_2 = "pcx_1_pmut_0.01/train_01-06-2022-10-29-01_Haploid_pcx_1_pmut_0.01.json"
 
+if __name__ == "__main__":
+    # z std. dev
+    f = open(f'data/{file_1}')
+    data = load_json(file=f)
+    single_population_chart(all_data=data, show_avg=True, show_std_dev=True, show_max=True, show_max_hof=True)
 
-# z std. dev
-f = open(f'data/{file_1}')
-data = load_json(file=f)
-single_population_chart(all_data=data, show_avg=True, show_std_dev=True, show_max=True, show_max_hof=True)
+    f = open(f'data/{file_2}')
+    data = load_json(file=f)
+    single_population_chart(all_data=data, show_avg=True, show_std_dev=True, show_max=True, show_max_hof=True)
 
-f = open(f'data/{file_2}')
-data = load_json(file=f)
-single_population_chart(all_data=data, show_avg=True, show_std_dev=True, show_max=True, show_max_hof=True)
+    f_dual_1 = open(f'data/{file_1}')
+    dual_data_1 = load_json(file=f_dual_1)
 
-f_dual_1 = open(f'data/{file_1}')
-dual_data_1 = load_json(file=f_dual_1)
+    f_dual_2 = open(f'data/{file_2}')
+    dual_data_2 = load_json(file=f_dual_2)
 
-f_dual_2 = open(f'data/{file_2}')
-dual_data_2 = load_json(file=f_dual_2)
+    dual_chart(all_data_1=dual_data_1, all_data_2=dual_data_2)
+    dual_chart(all_data_1=dual_data_1, all_data_2=dual_data_2, x_attribute='time')
 
-dual_chart(all_data_1=dual_data_1, all_data_2=dual_data_2)
-dual_chart(all_data_1=dual_data_1, all_data_2=dual_data_2, x_attribute='time')
-
-plt.show()
-f.close()
+    plt.show()
+    f.close()
