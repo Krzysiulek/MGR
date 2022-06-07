@@ -69,9 +69,9 @@ if __name__ == "__main__":
                 continue
 
             if p_mut > 0.4 or p_cross > 0.4:
-                MAX_ITERS = 150
+                MAX_ITERS = 40
             else:
-                MAX_ITERS = 500
+                MAX_ITERS = 300
 
             experiments_num = 3
             for i in range(experiments_num):
