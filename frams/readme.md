@@ -20,3 +20,14 @@ PYTHONUNBUFFERED=1;DIR_WITH_FRAMS_LIBRARY=C:\Users\Lenovo\OneDrive\Pulpit\MGR\Fr
 - Wyjaśnienie co to jest Framstik
 - Dla każdego eksperymentu, odpalić framsticka i wkleić jego zdjęcie
 - Różne architektury - eaSimple / eaMuPlusLambda / eaMuCommaLambda / eaGenerateUpdate
+
+
+malo -> p_mut, p_cross
+
+# Notatki
+## 07.06.2022
+vertpos, distance -> period2
+slurm
+jedno kryterium
+long
+vertpos

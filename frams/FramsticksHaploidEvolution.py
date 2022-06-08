@@ -147,11 +147,12 @@ def run(parsed_args,
                                            toolbox,
                                            cxpb=p_cx,
                                            mutpb=p_mut,
+                                           # cxpb=parsed_args.pxov, mutpb=parsed_args.pmut,
                                            ngen=parsed_args.generations,
                                            stats=stats,
                                            halloffame=hof,
                                            verbose=True)
-        log = append_logs(log, tmp_log)  # TODO: przepisywać logi
+        log = append_logs(log, tmp_log)
 
         if (get_max_in_hof(hof) > hof_fitness):
             hof_fitness = get_max_in_hof(hof)

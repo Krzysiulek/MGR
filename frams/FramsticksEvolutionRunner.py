@@ -63,17 +63,9 @@ if __name__ == "__main__":
     # h.join()
     # d.join()
 
-    for p_cross in [1, 0.8, 0.6, 0.4, 0.2, 0.1, 0.05, 0.01]:
-        for p_mut in [1, 0.8, 0.6, 0.4, 0.2, 0.1, 0.05, 0.01]:
-            if (p_cross == 1 and p_mut == 1) or (p_cross == 1 and p_mut == 0.8):
-                continue
-
-            if p_mut > 0.4 or p_cross > 0.4:
-                MAX_ITERS = 40
-            else:
-                MAX_ITERS = 300
-
-            experiments_num = 3
+    for p_cross in [0.2]:
+        for p_mut in [0.9]:
+            experiments_num = 20
             for i in range(experiments_num):
                 print(f"DOING EXPERIMENT [{i}/{experiments_num}]: p_cx={p_cross}; p_mut={p_mut}")
                 experiment_start_time = datetime.now()

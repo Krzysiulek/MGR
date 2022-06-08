@@ -10,9 +10,9 @@
 
 sim_params:
 # no need to evaluate a creature many times:
-evalcount:0
+evalcount:1
 # always central location in the world:
-placement:0
+placement:1
 # no random initialization of state in neurons:
 randinit:0.0
 # other noise parameters:
