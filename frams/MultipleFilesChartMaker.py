@@ -17,7 +17,7 @@ from ChartMaker import load_json, get_list_of_attributs
 
 def get_max_of_files(data):
     max_x = data["logs"][-1]["trained_pop"]
-    max_y = data["metadata"]["hof"][0]["distance"]
+    max_y = data["metadata"]["hof"][0]["velocity"]
     return max_x, max_y
 
 def single_population_chart(fig,
@@ -29,6 +29,7 @@ def single_population_chart(fig,
     type = all_data["metadata"]["type"]
     p_cx = all_data["metadata"]["p_cx"]
     p_mut = all_data["metadata"]["p_mut"]
+    popsize = all_data["metadata"]["population_size"]
 
     x = get_list_of_attributs(x_attribute, data, 0)
 
@@ -41,10 +42,10 @@ def single_population_chart(fig,
         ax.plot(x, y_hof, color=color)
 
 
-    title = f"{type} pcx={p_cx} pmut={p_mut}"
+    title = f"Haploid vs diploid. p_cx={p_cx} pmut={p_mut}. Popsize={popsize}"
     ax.set_title(title)
     ax.set_xlabel(x_attribute)
-    ax.set_ylabel("fitness")
+    ax.set_ylabel("Fitness (velocity)")
     ax.set_ylim(ymin=0)
     ax.legend()
     ax.set_xlim(xmin=0)
@@ -78,12 +79,12 @@ for dir_name in os.listdir(rootdir):
 
             x, y = get_max_of_files(data)
             if x > max_x:
-                max_x = x + 50
+                max_x = x
             if y > max_y:
-                max_y = y + 50
+                max_y = y
 
         plt.xticks(np.arange(0, roundup(max_x), roundup(max_x / 10, 1000)))
-        plt.yticks(np.arange(0, roundup(max_y), roundup(max_y / 10, 10)))
+        plt.yticks(np.arange(0, max_y * 1.1, max_y / 10))
 
     plt.savefig(f'{d}/fig.png')
     plt.show()

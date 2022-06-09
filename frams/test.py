@@ -1,1 +1,3 @@
-print("{:<10} {:<10} {:<10} {:<10} {:<10} {:<10} {:<10} {:<10} {:<10}".format("px/pmut", "1", "0.8", "0.6", "0.4", "0.2", "0.1", "0.05", "0.01"))
+from datetime import datetime
+
+print(datetime.now().strftime("%d-%m-%Y-%H-%M-%S.%f"))

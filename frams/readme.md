@@ -26,8 +26,8 @@ malo -> p_mut, p_cross
 
 # Notatki
 ## 07.06.2022
-vertpos, distance -> period2
-slurm
-jedno kryterium
-long
-vertpos
+- slurm
+- jedno kryterium
+  - vertpos lub velocity -> period2
+- vertpos -> period2
+- velocity -> period-longest

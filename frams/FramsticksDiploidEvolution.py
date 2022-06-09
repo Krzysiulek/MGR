@@ -179,7 +179,7 @@ def run(parsed_args,
     log = []
     iters = 0
     while (should_continue):
-        pop = reproduce_hof(hof=hof, population=pop)
+        # pop = reproduce_hof(hof=hof, population=pop)
         iters += 1
         print(f"Calculating Diploid. Iteration: {iters}")
 

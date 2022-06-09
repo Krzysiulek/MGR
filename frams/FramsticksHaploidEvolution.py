@@ -142,7 +142,7 @@ def run(parsed_args,
     iters = 0
     while (should_continue):
         iters += 1
-        pop = reproduce_hof(hof=hof, population=pop)
+        # pop = reproduce_hof(hof=hof, population=pop)
         pop, tmp_log = algorithms.eaSimple(pop,
                                            toolbox,
                                            cxpb=p_cx,

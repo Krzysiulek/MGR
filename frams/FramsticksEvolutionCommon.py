@@ -154,8 +154,8 @@ def save_logs(log,
                                             max_numparts=max_numparts)
     dict_to_save["logs"] = get_population_logs(log, popsize)
 
-    now = experiment_start_time.strftime("%d-%m-%Y-%H-%M-%S")
-    dir = f'data/pcx_{p_cx}_pmut_{p_mut}'
+    now = experiment_start_time.strftime("%d-%m-%Y-%H-%M-%S.%f")
+    dir = f'data/pcx_{p_cx}_pmut_{p_mut}_popsize_{popsize}'
     path = f'{dir}/train_{now}_{type}_pcx_{p_cx}_pmut_{p_mut}.json'
 
     os.makedirs(dir, exist_ok=True)
