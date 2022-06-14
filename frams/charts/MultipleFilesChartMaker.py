@@ -1,24 +1,26 @@
-import json
-from os import listdir
-from os.path import isfile, join
+import math
+import os
 
 import matplotlib.pyplot as plt
 import numpy as np
-import math
+
+from ChartMaker import load_json, get_list_of_attributs
+from frams.charts.ChartUtils import get_all_dirs_in, should_skip_file
+
 
 def roundup(x, roundup=100):
     return int(math.ceil(x / roundup)) * roundup
 
-import os
+
 plt.rcParams.update({'figure.max_open_warning': 0})
 plt.rcParams["figure.autolayout"] = True
 
-from ChartMaker import load_json, get_list_of_attributs
 
 def get_max_of_files(data):
     max_x = data["logs"][-1]["trained_pop"]
     max_y = data["metadata"]["hof"][0]["velocity"]
     return max_x, max_y
+
 
 def single_population_chart(fig,
                             ax,
@@ -41,7 +43,6 @@ def single_population_chart(fig,
         y_hof = get_list_of_attributs('hof_fitness', data, 0)
         ax.plot(x, y_hof, color=color)
 
-
     title = f"Haploid vs diploid. p_cx={p_cx} pmut={p_mut}. Popsize={popsize}"
     ax.set_title(title)
     ax.set_xlabel(x_attribute)
@@ -52,39 +53,32 @@ def single_population_chart(fig,
 
 
 rootdir = 'data'
-for dir_name in os.listdir(rootdir):
-    d = os.path.join(rootdir, dir_name)
+for dir in get_all_dirs_in(rootdir):
+    fig, ax = plt.subplots()
 
-    if dir_name == ".gitkeep" or dir_name == "history":
-        continue
+    ax.plot([], [], color='tab:red', label="Diploid")
+    ax.plot([], [], color='tab:blue', label="Haploid")
 
+    max_x = 0
+    max_y = 0
 
-    if os.path.isdir(d):
-        fig, ax = plt.subplots()
+    for log_file_name in os.listdir(dir):
+        if should_skip_file(log_file_name):
+            continue
 
-        ax.plot([], [], color='tab:red', label="Diploid")
-        ax.plot([], [], color='tab:blue', label="Haploid")
+        print(f"Creating {dir}/{log_file_name}")
+        f = open(f"{dir}/{log_file_name}")
+        data = load_json(file=f)
+        single_population_chart(fig, ax, data, show_max_hof=True)
 
-        max_x = 0
-        max_y = 0
+        x, y = get_max_of_files(data)
+        if x > max_x:
+            max_x = x
+        if y > max_y:
+            max_y = y
 
-        for log_file_name in os.listdir(d):
-            if log_file_name == "fig.png":
-                continue
+    plt.xticks(np.arange(0, roundup(max_x), roundup(max_x / 10, 1000)))
+    plt.yticks(np.arange(0, max_y * 1.1, max_y / 10))
 
-            print(f"Creating {d}/{log_file_name}")
-            f = open(f"{d}/{log_file_name}")
-            data = load_json(file=f)
-            single_population_chart(fig, ax, data, show_max_hof=True)
-
-            x, y = get_max_of_files(data)
-            if x > max_x:
-                max_x = x
-            if y > max_y:
-                max_y = y
-
-        plt.xticks(np.arange(0, roundup(max_x), roundup(max_x / 10, 1000)))
-        plt.yticks(np.arange(0, max_y * 1.1, max_y / 10))
-
-    plt.savefig(f'{d}/fig.png')
+    plt.savefig(f'{dir}/all-logs-chart.png')
     plt.show()
