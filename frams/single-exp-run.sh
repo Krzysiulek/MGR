@@ -1,4 +1,6 @@
 #!/bin/sh
+
+# srun -p idss-student --time 24:00:00 -N3 --exclude lab-al-7 -o logs.log -e err-logs.log ~/MGR/frams/single-exp-run.sh &
 echo "Starting to execute"
 
 export PYTHONUNBUFFERED=1
