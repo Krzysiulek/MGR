@@ -1,6 +1,5 @@
 import argparse
 import sys
-import time
 from datetime import datetime
 from multiprocessing import Process
 
@@ -13,8 +12,9 @@ MAX_ITERS = 100
 MIN_ITERS = 100
 
 
-def haploid_function(parsed_args, experiment_start_time, p_cx, p_mut):
-    start = time.time()
+def haploid_function(parsed_args, p_cx, p_mut):
+    experiment_start_time = datetime.now()
+
     max_haploid, haploid_iters = haploid.run(parsed_args=parsed_args,
                                              deterministic=DETERMINISTIC,
                                              max_iters_limit=MAX_ITERS,
@@ -23,15 +23,13 @@ def haploid_function(parsed_args, experiment_start_time, p_cx, p_mut):
                                              p_cx=p_cx,
                                              p_mut=p_mut)
 
-    haploid_took = time.time() - start
-
 
 def print_time(type, max, time, iterations):
     print(f"[{type}] Max={max}. Took={time}. Iterations={iterations}")
 
 
-def diploid_function(parsed_args, experiment_start_time, p_cx, p_mut):
-    start = time.time()
+def diploid_function(parsed_args, p_cx, p_mut):
+    experiment_start_time = datetime.now()
     max_diploid, diploid_iters = diploid.run(parsed_args=parsed_args,
                                              deterministic=DETERMINISTIC,
                                              max_iters_limit=MAX_ITERS,
@@ -39,8 +37,6 @@ def diploid_function(parsed_args, experiment_start_time, p_cx, p_mut):
                                              experiment_start_time=experiment_start_time,
                                              p_cx=p_cx,
                                              p_mut=p_mut)
-    diploid_took = time.time() - start
-
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
