@@ -64,6 +64,7 @@ if __name__ == "__main__":
 
     # Turn-on the worker thread.
     threading.Thread(target=worker, daemon=True).start()
+    threading.Thread(target=worker, daemon=True).start()
 
     for p_cross in [0.2]:
         for p_mut in [0.9]:
