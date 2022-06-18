@@ -10,8 +10,8 @@ import FramsticksHaploidEvolution as haploid
 from FramsticksEvolutionCommon import parseArguments
 
 DETERMINISTIC = False
-MAX_ITERS = 100
-MIN_ITERS = 100
+MAX_ITERS = 450000
+MIN_ITERS = 450000
 
 
 def haploid_function(parsed_args, p_cx, p_mut):
@@ -66,7 +66,7 @@ if __name__ == "__main__":
 
     for p_cross in [0.2]:
         for p_mut in [0.9]:
-            experiments_num = 10
+            experiments_num = 5
             for i in range(experiments_num):
                 h = Process(target=haploid_function, args=(parsed_args, p_cross, p_mut))
                 d = Process(target=diploid_function, args=(parsed_args, p_cross, p_mut))

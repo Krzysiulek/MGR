@@ -1,14 +1,14 @@
 import argparse
 import random
 import sys
+import time
 
 import numpy as np
 from deap import creator, tools, base
-import time
 
 # do modyfikacji. Wzięte z deap'a
-from FramsticksEvolutionCommon import genotype_within_constraint, parseArguments, get_seed, has_reached_iters_limits, \
-    save_logs, should_continue_simulation, append_logs, get_max_in_hof, get_time_from_start, reproduce_hof, get_type
+from FramsticksEvolutionCommon import genotype_within_constraint, parseArguments, get_seed, save_logs, \
+    should_continue_simulation, append_logs, get_max_in_hof, get_time_from_start, get_type
 from FramsticksLib import FramsticksLib
 from mydeap import algorithms
 
@@ -202,7 +202,7 @@ def run(parsed_args,
         else:
             still_improving = False
 
-        should_continue = should_continue_simulation(current_iter=iters,
+        should_continue = should_continue_simulation(current_iter=iters * parsed_args.popsize,
                                                      max_limit=max_iters_limit,
                                                      min_limit=min_iters_limit,
                                                      is_improving=still_improving)
