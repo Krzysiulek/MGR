@@ -16,5 +16,5 @@ echo "Application executed"
 # watch -n 1 squeue -u inf136224
 
 # cd ~/MGR/frams/ && srun -p idss-student --time 24:00:00 -N2 --exclude lab-al-7 -o logs100.log -e err-logs100.log --test-only  ~/MGR/frams/single-exp-run.sh &
-# cd ~/MGR/frams/ && srun -p idss-student --time 24:00:00 -N2 --exclude lab-al-7 -o logs100.log -e err-logs100.log  ~/MGR/frams/single-exp-run.sh &
-# cd ~/MGR/frams/ && srun -p idss-student --time 24:00:00 -N2 --exclude lab-al-7 -o logs50.log -e err-logs50.log  ~/MGR/frams/single-exp-run-2.sh &
+# cd ~/MGR/frams/ && srun -p idss-student --time 24:00:00 -N1 --exclude lab-al-7 -o logs100.log -e err-logs100.log  ~/MGR/frams/single-exp-run.sh &
+# cd ~/MGR/frams/ && srun -p idss-student --time 24:00:00 -N1 --exclude lab-al-7 -o logs50.log -e err-logs50.log  ~/MGR/frams/single-exp-run-2.sh &

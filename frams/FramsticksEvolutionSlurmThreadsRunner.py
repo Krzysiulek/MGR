@@ -66,7 +66,8 @@ if __name__ == "__main__":
 
     for p_cross in [0.2]:
         for p_mut in [0.9]:
-            experiments_num = 5
+            experiments_num = 1
+
             for i in range(experiments_num):
                 h = Process(target=haploid_function, args=(parsed_args, p_cross, p_mut))
                 d = Process(target=diploid_function, args=(parsed_args, p_cross, p_mut))
