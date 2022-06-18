@@ -10,8 +10,8 @@ import FramsticksHaploidEvolution as haploid
 from FramsticksEvolutionCommon import parseArguments
 
 DETERMINISTIC = False
-MAX_ITERS = 450000
-MIN_ITERS = 450000
+MAX_ITERS = 400000
+MIN_ITERS = 400000
 
 
 def haploid_function(parsed_args, p_cx, p_mut):

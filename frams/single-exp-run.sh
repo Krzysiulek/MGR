@@ -14,3 +14,7 @@ echo "Application executed"
 # rm -rf /Users/krzysztofczarnecki/Documents/studia/MGR/frams/data/pcx_0.2_pmut_0.9_popsize_100 && rm -rf /Users/krzysztofczarnecki/Documents/studia/MGR/frams/data/pcx_0.2_pmut_0.9_popsize_50 && scp -r inf136224@polluks.cs.put.poznan.pl:/home/inf136224/MGR/frams/data/pcx_0.2_pmut_0.9_popsize_100 /Users/krzysztofczarnecki/Documents/studia/MGR/frams/data/pcx_0.2_pmut_0.9_popsize_100 && scp -r inf136224@polluks.cs.put.poznan.pl:/home/inf136224/MGR/frams/data/pcx_0.2_pmut_0.9_popsize_50 /Users/krzysztofczarnecki/Documents/studia/MGR/frams/data/pcx_0.2_pmut_0.9_popsize_50
 # Riafah3eesho
 # watch -n 1 squeue -u inf136224
+
+# cd ~/MGR/frams/ && srun -p idss-student --time 24:00:00 -N2 --exclude lab-al-7 -o logs100.log -e err-logs100.log --test-only  ~/MGR/frams/single-exp-run.sh &
+# cd ~/MGR/frams/ && srun -p idss-student --time 24:00:00 -N2 --exclude lab-al-7 -o logs100.log -e err-logs100.log  ~/MGR/frams/single-exp-run.sh &
+# cd ~/MGR/frams/ && srun -p idss-student --time 24:00:00 -N2 --exclude lab-al-7 -o logs50.log -e err-logs50.log  ~/MGR/frams/single-exp-run-2.sh &

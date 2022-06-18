@@ -52,6 +52,7 @@ def single_population_chart(fig,
     ax.set_xlim(xmin=0)
 
 
+# rootdir = 'data/history/slurm_exp1_fail'
 rootdir = 'data'
 for dir in get_all_dirs_in(rootdir):
     fig, ax = plt.subplots()

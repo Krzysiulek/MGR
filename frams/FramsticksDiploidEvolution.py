@@ -142,7 +142,7 @@ def duplicateIndividuals(population):
         individual.append(individual[0])
     return population
 
-def run(parsed_args,
+def generationsrun(parsed_args,
         deterministic=False,
         max_iters_limit=None,
         min_iters_limit=None,
@@ -202,7 +202,7 @@ def run(parsed_args,
         else:
             still_improving = False
 
-        should_continue = should_continue_simulation(current_iter=iters * parsed_args.popsize,
+        should_continue = should_continue_simulation(current_iter=iters * parsed_args.popsize * parsed_args.generations,
                                                      max_limit=max_iters_limit,
                                                      min_limit=min_iters_limit,
                                                      is_improving=still_improving)
