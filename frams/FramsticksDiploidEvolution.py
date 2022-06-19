@@ -142,7 +142,7 @@ def duplicateIndividuals(population):
         individual.append(individual[0])
     return population
 
-def generationsrun(parsed_args,
+def run(parsed_args,
         deterministic=False,
         max_iters_limit=None,
         min_iters_limit=None,
