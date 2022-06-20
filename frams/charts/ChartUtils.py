@@ -9,7 +9,7 @@ def should_skip_folder(dir_name):
 
 
 def should_skip_file(filename):
-    to_skip = ["fig.png", "boxplot-chart.png", "all-logs-chart.png"]
+    to_skip = ["fig.png", "boxplot-chart.png", "all-logs-chart.png", "mean-logs-chart.png"]
     return to_skip.__contains__(filename)
 
 
