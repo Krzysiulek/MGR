@@ -40,7 +40,7 @@ for dir in get_all_dirs_in(rootdir):
     fig1, ax = plt.subplots()
     title = f"Haploid vs diploid. p_cx={p_cx} pmut={p_mut}. Popsize={popsize}"
     ax.set_title(title)
-    ax.boxplot([haploid_velocity, diploid_velocity])
+    ax.boxplot([haploid_velocity, diploid_velocity], notch=True)
     ax.set_ylabel("Fitness (velocity)")
     plt.xticks([1, 2], ['Haploid', 'Diploid'])
     plt.savefig(f'{dir}/boxplot-chart.png')
@@ -64,7 +64,7 @@ for value in set_of_all:
 fig2, ax2 = plt.subplots()
 title = f"Summary Haploid vs diploid."
 ax2.set_title(title)
-ax2.boxplot(datas)
+ax2.boxplot(datas, notch=True)
 ax2.set_ylabel("Fitness (velocity)")
 plt.xticks(rotation=20)
 plt.xticks(porz, names)

@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# srun -p idss-student --time 24:00:00 -N3 --exclude lab-al-7 -o logs.log -e err-logs.log ~/MGR/frams/single-exp-run.sh &
+# srun -p idss-student --time 24:00:00 -N3 --exclude lab-al-7 -o logs.log -e err-logs.log ~/MGR/frams/run-velocity-100.sh &
 echo "Starting to execute"
 
 export PYTHONUNBUFFERED=1
@@ -15,9 +15,9 @@ echo "Application executed"
 # Riafah3eesho
 # watch -n 1 squeue -u inf136224
 
-# cd ~/MGR/frams/ && srun -p idss-student --time 24:00:00 -N2 --exclude lab-al-7 -o logs100.log -e err-logs100.log --test-only  ~/MGR/frams/single-exp-run.sh &
-# cd ~/MGR/frams/ && srun -p idss-student --time 24:00:00 -N1 --exclude lab-al-7 -o logs100.log -e err-logs100.log  ~/MGR/frams/single-exp-run.sh &
-# cd ~/MGR/frams/ && srun -p idss-student --time 24:00:00 -N1 --exclude lab-al-7 -o logs50.log -e err-logs50.log  ~/MGR/frams/single-exp-run-2.sh &
+# cd ~/MGR/frams/ && srun -p idss-student --time 24:00:00 -N2 --exclude lab-al-7 -o logs100.log -e err-logs100.log --test-only  ~/MGR/frams/run-velocity-100.sh &
+# cd ~/MGR/frams/ && srun -p idss-student --time 24:00:00 -N1 --exclude lab-al-7 -o logs100.log -e err-logs100.log  ~/MGR/frams/run-velocity-100.sh &
+# cd ~/MGR/frams/ && srun -p idss-student --time 24:00:00 -N1 --exclude lab-al-7 -o logs50.log -e err-logs50.log  ~/MGR/frams/run-velocity-50.sh &
 
-# cd ~/MGR/frams/ && sbatch -p idss-student --time 24:00:00 -N1 --exclude lab-al-7 -o logs100.log -e err-logs100.log  ~/MGR/frams/single-exp-run.sh &
-# cd ~/MGR/frams/ && sbatch -p idss-student --time 24:00:00 -N1 --exclude lab-al-7 -o logs50.log -e err-logs50.log  ~/MGR/frams/single-exp-run-2.sh &
+# cd ~/MGR/frams/ && sbatch -p idss-student --time 24:00:00 -N1 --exclude lab-al-7 -o logs100.log -e err-logs100.log  ~/MGR/frams/run-velocity-100.sh &
+# cd ~/MGR/frams/ && sbatch -p idss-student --time 24:00:00 -N1 --exclude lab-al-7 -o logs50.log -e err-logs50.log  ~/MGR/frams/run-velocity-50.sh &
