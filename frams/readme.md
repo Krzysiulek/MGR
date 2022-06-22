@@ -24,6 +24,12 @@ PYTHONUNBUFFERED=1;DIR_WITH_FRAMS_LIBRARY=C:\Users\Lenovo\OneDrive\Pulpit\MGR\Fr
 
 malo -> p_mut, p_cross
 
+# Uruchamianie:
+## Opis skryptów:
+
+## Pomoce przy uruchomieniu:
+
+
 # Notatki
 ## 07.06.2022
 - slurm

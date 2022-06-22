@@ -21,3 +21,5 @@ echo "Application executed"
 
 # cd ~/MGR/frams/ && sbatch -p idss-student --time 24:00:00 -N1 --exclude lab-al-7 -o logs100.log -e err-logs100.log  ~/MGR/frams/run-velocity-100.sh &
 # cd ~/MGR/frams/ && sbatch -p idss-student --time 24:00:00 -N1 --exclude lab-al-7 -o logs50.log -e err-logs50.log  ~/MGR/frams/run-velocity-50.sh &
+# cd ~/MGR/frams/ && sbatch -p idss-student --time 24:00:00 -N1 --exclude lab-al-7 -o logs50.log -e err-logs50.log  ~/MGR/frams/run-vertpos-50.sh &
+# cd ~/MGR/frams/ && sbatch -p idss-student --time 24:00:00 -N1 --exclude lab-al-7 -o logs50.log -e err-logs50.log  ~/MGR/frams/run-vertpos-100.sh &
