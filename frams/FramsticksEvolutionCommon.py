@@ -1,9 +1,8 @@
-import os
 import json
+import os
+import random
 import time
 from datetime import datetime
-import random
-import os
 
 
 def genotype_within_constraint(genotype, dict_criteria_values, criterion_name, constraint_value):
@@ -17,6 +16,7 @@ def genotype_within_constraint(genotype, dict_criteria_values, criterion_name, c
                         genotype, criterion_name, actual_value, constraint_value))
             return False
     return True
+
 
 def reproduce_hof(hof, population):
     if len(hof) <= 0:
@@ -35,9 +35,8 @@ def reproduce_hof(hof, population):
         if max(ind.fitness.values) < get_max_in_hof(hof) / 2:
             population[i] = hof.items[0]
 
-
-
     return population
+
 
 def ensureDir(string):
     if os.path.isdir(string):
@@ -45,11 +44,14 @@ def ensureDir(string):
     else:
         raise NotADirectoryError(string)
 
+
 def get_time_from_start(arg, arg2):
     return time.time() - arg
 
+
 def get_type(type, arg):
     return type
+
 
 def append_logs(logs, logs_to_append):
     if len(logs) > 0:
@@ -64,8 +66,10 @@ def append_logs(logs, logs_to_append):
 
     return logs
 
+
 def get_seed(deterministic):
     return 123 if deterministic else None
+
 
 def get_hof_info(hof, optimization_criteria):
     keyval_list = []
@@ -80,12 +84,14 @@ def get_hof_info(hof, optimization_criteria):
         keyval_list.append(keyval)
     return keyval_list
 
+
 def get_max_in_hof(hof):
     max_hof = 0
     for ind in hof:
         if max_hof < max(ind.fitness.values):
             max_hof = max(ind.fitness.values)
     return max_hof
+
 
 def get_metadata(pop_size=0,
                  type="",
@@ -109,6 +115,7 @@ def get_metadata(pop_size=0,
         "max_numparts": max_numparts
     }
 
+
 def get_population_logs(log, popsize):
     trained_pop_num = 0
     list_to_save = []
@@ -127,6 +134,7 @@ def get_population_logs(log, popsize):
         list_to_save.append(dict_log)
 
     return list_to_save
+
 
 def save_logs(log,
               popsize,
@@ -158,9 +166,17 @@ def save_logs(log,
     dir = f'data/pcx_{p_cx}_pmut_{p_mut}_popsize_{popsize}'
     path = f'{dir}/train_{now}_{type}_pcx_{p_cx}_pmut_{p_mut}.json'
 
-    os.makedirs(dir, exist_ok=True)
-    with open(path, 'w') as fout:
-        json.dump(dict_to_save, fout)
+    for i in range(100):
+        try:
+            os.makedirs(dir, exist_ok=True)
+            with open(path, 'w') as fout:
+                json.dump(dict_to_save, fout)
+            print(f"Saved file  with [{i}] try. File=[{path}]")
+            break
+
+        except Exception:
+            print(f"Try: {i}. Exception while saving file {path}")
+            time.sleep(2)
 
 
 def has_reached_iters_limits(limit, current_iter):
@@ -168,6 +184,7 @@ def has_reached_iters_limits(limit, current_iter):
         return False
 
     return current_iter >= limit
+
 
 def should_continue_simulation(current_iter, max_limit, min_limit, is_improving):
     if min_limit is not None and min_limit > current_iter:
