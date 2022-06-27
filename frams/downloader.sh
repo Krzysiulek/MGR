@@ -1,5 +1,5 @@
 #!/bin/sh
-# Riafah3eesho
+
 rm -rf /Users/krzysztofczarnecki/Documents/studia/MGR/frams/data/pcx_0.2_pmut_0.9_popsize_100
 rm -rf /Users/krzysztofczarnecki/Documents/studia/MGR/frams/data/pcx_0.2_pmut_0.9_popsize_50
 

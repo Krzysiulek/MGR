@@ -11,24 +11,60 @@ PYTHONUNBUFFERED=1;DIR_WITH_FRAMS_LIBRARY=C:\Users\Lenovo\OneDrive\Pulpit\MGR\Fr
 ```
 
 # Pomysły na pracę:
-- testy dla kilku różnych reprezentacji
 - testy dla małych pop-size
 - testy dla dużych pop-size
 - testy na zbiezność
 - Przystosowanie pod szybkość
-- Przystosowanie pod konkretny kształt
 - Wyjaśnienie co to jest Framstik
 - Dla każdego eksperymentu, odpalić framsticka i wkleić jego zdjęcie
-- Różne architektury - eaSimple / eaMuPlusLambda / eaMuCommaLambda / eaGenerateUpdate
 
-
-malo -> p_mut, p_cross
 
 # Uruchamianie:
 ## Opis skryptów:
 
 ## Pomoce przy uruchomieniu:
+#### Podglądanie aktualnych jobów:
+```shell
+watch -n 5 "squeue -u inf136224 -t PD | wc -l \\
+&& squeue -u inf136224 -t R | wc -l \\
+&& squeue --format=\"%.18i %.9P %.30j %.8u %.8T %.10M %.9l %.6D %R\" -u inf136224 -t R \\
+&& squeue -u inf136224 -t PD --start | grep Resources"
 
+
+squeue --format="%.18i %.9P %.30j %.8u %.8T %.10M %.9l %.6D %R" -u inf136224 -t R
+```
+
+### Uruchamianie SLURM:
+#### Velocity 50
+```shell
+sbatch -p idss-student --time 24:00:00 -N1 --exclude lab-al-7 -o logs50.log -e err-logs50.log  ~/MGR/frams/run-velocity-50.sh
+```
+
+#### Velocity 100
+```shell
+sbatch -p idss-student --time 24:00:00 -N1 --exclude lab-al-7 -o logs100.log -e err-logs100.log  ~/MGR/frams/run-velocity-100.sh
+```
+
+#### Vertpos 50
+```shell
+srun -p idss-student --time 24:00:00 -N1 --exclude lab-al-7 -o logs50.log -e err-logs50.log  ~/MGR/frams/run-vertpos-50.sh &
+```
+
+#### Vertpos 100
+```shell
+srun -p idss-student --time 24:00:00 -N10 --exclude lab-al-7 -o logs100.log -e err-logs100.log  ~/MGR/frams/run-vertpos-100.sh &
+```
+
+```shell
+#!/bin/sh
+
+for i in {0..2..1}
+do
+  echo "Running $i"
+  sbatch -p idss-student --time 24:00:00 -N1 --exclude lab-al-7 -o logs100.log -e err-logs100.log  ~/MGR/frams/run-vertpos-100.sh 
+  sbatch -p idss-student --time 24:00:00 -N1 --exclude lab-al-7 -o logs50.log -e err-logs50.log  ~/MGR/frams/run-vertpos-50.sh
+done
+```
 
 # Notatki
 ## 07.06.2022

@@ -60,6 +60,7 @@ for dir in get_all_dirs_in(rootdir):
     p_mut = None
 
     for file in get_all_files_in_dir(dir):
+        print(f"{dir}/{file}")
         data = get_data(dir, file)
 
         popsize = data["metadata"]["population_size"]
@@ -84,6 +85,7 @@ for dir in get_all_dirs_in(rootdir):
     ax.set_ylabel("Mean fitness (velocity)")
     title = f"Haploid vs diploid. p_cx={p_cx} pmut={p_mut}. Popsize={popsize}"
     ax.set_title(title)
+    plt.xlabel(f"{dir}")
 
     single_population_chart(ax, x_hap, y_mean_hap, y_std_dev_hap, color='tab:blue')
     single_population_chart(ax, x_dip, y_mean_dip, y_std_dev_dip, color='tab:red')

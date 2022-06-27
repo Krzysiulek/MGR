@@ -20,7 +20,7 @@ for dir in get_all_dirs_in(rootdir):
         p_mut = data["metadata"]["p_mut"]
         popsize = data["metadata"]["population_size"]
         type_of_data = data["metadata"]["type"]
-        v = data["metadata"]["hof"][0]["velocity"]
+        v = data["metadata"]["hof"][0]["vertpos"]
 
         if type_of_data == "Haploid":
             haploid_velocity.append(v)
@@ -43,6 +43,7 @@ for dir in get_all_dirs_in(rootdir):
     ax.boxplot([haploid_velocity, diploid_velocity], notch=True)
     ax.set_ylabel("Fitness (velocity)")
     plt.xticks([1, 2], ['Haploid', 'Diploid'])
+    plt.xlabel(f"{dir}")
     plt.savefig(f'{dir}/boxplot-chart.png')
     # plt.show()
 

@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 from ChartMaker import load_json, get_list_of_attributs
-from frams.charts.ChartUtils import get_all_dirs_in, should_skip_file
+from ChartUtils import get_all_dirs_in, should_skip_file
 
 
 def roundup(x, roundup=100):
@@ -18,7 +18,8 @@ plt.rcParams["figure.autolayout"] = True
 
 def get_max_of_files(data):
     max_x = data["logs"][-1]["trained_pop"]
-    max_y = data["metadata"]["hof"][0]["velocity"]
+    max_y = data["metadata"]["hof"][0]["vertpos"]
+
     return max_x, max_y
 
 
@@ -69,7 +70,12 @@ for dir in get_all_dirs_in(rootdir):
 
         print(f"Creating {dir}/{log_file_name}")
         f = open(f"{dir}/{log_file_name}")
-        data = load_json(file=f)
+
+        try:
+            data = load_json(file=f)
+        except Exception:
+            continue
+
         single_population_chart(fig, ax, data, show_max_hof=True)
 
         x, y = get_max_of_files(data)
@@ -80,6 +86,7 @@ for dir in get_all_dirs_in(rootdir):
 
     plt.xticks(np.arange(0, roundup(max_x), roundup(max_x / 10, 1000)))
     plt.yticks(np.arange(0, max_y * 1.1, max_y / 10))
+    plt.xlabel(f"{dir}")
 
     plt.savefig(f'{dir}/all-logs-chart.png')
     plt.show()
