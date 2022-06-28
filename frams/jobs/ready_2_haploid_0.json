@@ -3,8 +3,8 @@
   "pop_made": 30,
   "experiment_start_time": "",
   "params": {
-    "pmut": 0.5,
-    "pxov": 0.5,
+    "pmut": 0.9,
+    "pxov": 0.2,
     "path": "/home/inf136224/MGR/Framsticks50rc20",
     "sim": "eval-allcriteria-mini.sim;deterministic.sim;sample-period-longest.sim",
     "opt": "velocity",
