@@ -1,0 +1,23 @@
+{
+  "name": "Haploid",
+  "pop_made": 30,
+  "experiment_start_time": "",
+  "params": {
+    "pmut": 0.5,
+    "pxov": 0.5,
+    "path": "C:\\Users\\Lenovo\\OneDrive\\Pulpit\\MGR\\Framsticks50rc20",
+    "sim": "eval-allcriteria.sim;deterministic.sim;sample-period-longest.sim",
+    "opt": "velocity",
+    "max_numparts": 30,
+    "max_numgenochars": 50,
+    "initialgenotype": "X",
+    "popsize": 10,
+    "generations": 20,
+    "hof_size": 1
+  },
+  "history": {
+    "pop_path": "",
+    "hof_path": "",
+    "log_path": ""
+  }
+}

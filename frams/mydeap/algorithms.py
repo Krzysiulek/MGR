@@ -29,7 +29,6 @@ import random
 
 from deap import tools
 
-
 def varAnd(population, toolbox, cxpb, mutpb):
     """Part of an evolutionary algorithm applying only the variation part
     (crossover **and** mutation). The modified individuals have their

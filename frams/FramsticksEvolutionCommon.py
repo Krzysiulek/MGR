@@ -45,8 +45,12 @@ def ensureDir(string):
         raise NotADirectoryError(string)
 
 
-def get_time_from_start(arg, arg2):
-    return time.time() - arg
+def get_time_from_start(logs, passed_time, arg2):
+    # logs = []
+    if len(logs) > 0:
+        return time.time() - passed_time + logs[-1]["time"]
+
+    return time.time() - passed_time
 
 
 def get_type(type, arg):
@@ -162,7 +166,11 @@ def save_logs(log,
                                             max_numparts=max_numparts)
     dict_to_save["logs"] = get_population_logs(log, popsize)
 
-    now = experiment_start_time.strftime("%d-%m-%Y-%H-%M-%S.%f")
+    if isinstance(experiment_start_time, str):
+        now = experiment_start_time
+    else:
+        now = experiment_start_time.strftime("%d-%m-%Y-%H-%M-%S.%f")
+
     dir = f'data/pcx_{p_cx}_pmut_{p_mut}_popsize_{popsize}'
     path = f'{dir}/train_{now}_{type}_pcx_{p_cx}_pmut_{p_mut}.json'
 
