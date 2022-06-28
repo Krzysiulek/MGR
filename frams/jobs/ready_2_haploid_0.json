@@ -1,5 +1,5 @@
 {
-  "name": "Diploid",
+  "name": "Haploid",
   "pop_made": 30,
   "experiment_start_time": "",
   "params": {
@@ -11,7 +11,7 @@
     "max_numparts": 30,
     "max_numgenochars": 1000,
     "initialgenotype": "X",
-    "popsize": 50,
+    "popsize": 100,
     "generations": 500,
     "hof_size": 1
   },
