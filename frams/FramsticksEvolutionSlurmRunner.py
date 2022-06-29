@@ -1,45 +1,36 @@
 import argparse
 import sys
-import time
 from datetime import datetime
-from multiprocessing import Process
 
 import FramsticksDiploidEvolution as diploid
 import FramsticksHaploidEvolution as haploid
 from FramsticksEvolutionCommon import parseArguments
 
 DETERMINISTIC = False
-MAX_ITERS = 100
-MIN_ITERS = 100
+MAX_ITERS = 2000000
+MIN_ITERS = 2000000
 
 
-def haploid_function(parsed_args, experiment_start_time, p_cx, p_mut):
-    start = time.time()
-    max_haploid, haploid_iters = haploid.run(parsed_args=parsed_args,
-                                             deterministic=DETERMINISTIC,
-                                             max_iters_limit=MAX_ITERS,
-                                             min_iters_limit=MIN_ITERS,
-                                             experiment_start_time=experiment_start_time,
-                                             p_cx=p_cx,
-                                             p_mut=p_mut)
-
-    haploid_took = time.time() - start
+def haploid_function(parsed_args, p_cx, p_mut):
+    experiment_start_time = datetime.now()
+    haploid.run(parsed_args=parsed_args,
+                deterministic=DETERMINISTIC,
+                max_iters_limit=MAX_ITERS,
+                min_iters_limit=MIN_ITERS,
+                experiment_start_time=experiment_start_time,
+                p_cx=p_cx,
+                p_mut=p_mut)
 
 
-def print_time(type, max, time, iterations):
-    print(f"[{type}] Max={max}. Took={time}. Iterations={iterations}")
-
-
-def diploid_function(parsed_args, experiment_start_time, p_cx, p_mut):
-    start = time.time()
-    max_diploid, diploid_iters = diploid.run(parsed_args=parsed_args,
-                                             deterministic=DETERMINISTIC,
-                                             max_iters_limit=MAX_ITERS,
-                                             min_iters_limit=MIN_ITERS,
-                                             experiment_start_time=experiment_start_time,
-                                             p_cx=p_cx,
-                                             p_mut=p_mut)
-    diploid_took = time.time() - start
+def diploid_function(parsed_args, p_cx, p_mut):
+    experiment_start_time = datetime.now()
+    diploid.run(parsed_args=parsed_args,
+                deterministic=DETERMINISTIC,
+                max_iters_limit=MAX_ITERS,
+                min_iters_limit=MIN_ITERS,
+                experiment_start_time=experiment_start_time,
+                p_cx=p_cx,
+                p_mut=p_mut)
 
 
 if __name__ == "__main__":
@@ -52,14 +43,9 @@ if __name__ == "__main__":
     p_cross = 0.2
     p_mut = 0.9
 
-    print(f"DOING EXPERIMENT: p_cx={p_cross}; p_mut={p_mut}")
-    experiment_start_time = datetime.now()
+    task = parsed_args.task
 
-    h = Process(target=haploid_function, args=(parsed_args, experiment_start_time, p_cross, p_mut))
-    d = Process(target=diploid_function, args=(parsed_args, experiment_start_time, p_cross, p_mut))
-
-    h.start()
-    d.start()
-
-    h.join()
-    d.join()
+    if task == "haploid":
+        haploid_function(parsed_args, p_cross, p_mut)
+    elif task == "diploid":
+        diploid_function(parsed_args, p_cross, p_mut)

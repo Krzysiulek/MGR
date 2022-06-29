@@ -125,6 +125,8 @@ def run(parsed_args,
                              OPTIMIZATION_CRITERIA=OPTIMIZATION_CRITERIA,
                              parsed_args=parsed_args)
 
+    log = []
+
     pop = toolbox.population(n=parsed_args.popsize)
     hof = tools.HallOfFame(parsed_args.hof_size)
     stats = tools.Statistics(lambda ind: ind.fitness.values)
@@ -133,12 +135,11 @@ def run(parsed_args,
     stats.register("stddev", np.std)
     stats.register("min", np.min)
     stats.register("max", np.max)
-    stats.register("time", get_time_from_start, time.time())
+    stats.register("time", get_time_from_start, log, time.time())
 
     hof_fitness = get_max_in_hof(hof)
 
     should_continue = True
-    log = []
     iters = 0
     while (should_continue):
         iters += 1

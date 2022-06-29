@@ -164,6 +164,8 @@ def run(parsed_args,
     pop = toolbox.population(n=parsed_args.popsize)
     pop = duplicateIndividuals(pop)
 
+    log = []
+
     hof = tools.HallOfFame(parsed_args.hof_size)
     stats = tools.Statistics(lambda ind: ind.fitness.values)
     stats.register("type", get_type, 'D')
@@ -171,12 +173,11 @@ def run(parsed_args,
     stats.register("stddev", np.std)
     stats.register("min", np.min)
     stats.register("max", np.max)
-    stats.register("time", get_time_from_start, time.time())
+    stats.register("time", get_time_from_start, log, time.time())
 
     hof_fitness = get_max_in_hof(hof)
 
     should_continue = True
-    log = []
     iters = 0
     while (should_continue):
         # pop = reproduce_hof(hof=hof, population=pop)
