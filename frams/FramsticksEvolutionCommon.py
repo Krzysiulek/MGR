@@ -171,7 +171,8 @@ def save_logs(log,
     else:
         now = experiment_start_time.strftime("%d-%m-%Y-%H-%M-%S.%f")
 
-    dir = f'data/pcx_{p_cx}_pmut_{p_mut}_popsize_{popsize}'
+    opt_criterias = str("_".join(optimization_criteria))
+    dir = f'data/{opt_criterias}_pcx_{p_cx}_pmut_{p_mut}_popsize_{popsize}'
     path = f'{dir}/train_{now}_{type}_pcx_{p_cx}_pmut_{p_mut}.json'
 
     for i in range(100):
