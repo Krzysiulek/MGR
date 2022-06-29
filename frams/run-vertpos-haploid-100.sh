@@ -8,5 +8,5 @@ export DIR_WITH_FRAMS_LIBRARY=/home/inf136224/MGR/Framsticks50rc20
 
 echo "Running application"
 cd /home/inf136224/MGR/frams
-python3 FramsticksEvolutionSlurmThreadsRunner.py -path /home/inf136224/MGR/Framsticks50rc20 -sim "eval-allcriteria-mini.sim;deterministic.sim;sample-period-2.sim" -opt vertpos -max_numparts 30 -max_numgenochars 1000 -initialgenotype "X" -popsize 100 -generations 50 -hof_size 1 -task haploid
+python3 FramsticksEvolutionSlurmRunner.py -path /home/inf136224/MGR/Framsticks50rc20 -sim "eval-allcriteria-mini.sim;deterministic.sim;sample-period-2.sim" -opt vertpos -max_numparts 30 -max_numgenochars 1000 -initialgenotype "X" -popsize 100 -generations 50 -hof_size 1 -task haploid
 echo "Application executed"
