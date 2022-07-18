@@ -236,6 +236,7 @@ def parseArguments(parser, canSkipRequired=False):
                         help="Maximum number of Neural connections. Default: no limit")
     parser.add_argument('-max_numgenochars', type=int, default=None,
                         help="Maximum number of characters in genotype (including the format prefix, if any). Default: no limit")
+    parser.add_argument('-iters', type=int, default=None, help="Ile iteracji algorytmu ma sie zrobić ")
 
     parser.add_argument('-task', type=str, default=None,
                         help="haploid or diploid")
