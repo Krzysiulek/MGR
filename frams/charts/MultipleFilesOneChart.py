@@ -61,7 +61,10 @@ for dir in get_all_dirs_in(rootdir):
 
     for file in get_all_files_in_dir(dir):
         print(f"{dir}/{file}")
-        data = get_data(dir, file)
+        try:
+            data = get_data(dir, file)
+        except:
+            print("EXCEPTION")
 
         popsize = data["metadata"]["population_size"]
         p_cx = data["metadata"]["p_cx"]

@@ -35,6 +35,15 @@ squeue --format="%.18i %.9P %.30j %.8u %.8T %.10M %.9l %.6D %R" -u inf136224 -t 
 ```
 
 ### Uruchamianie SLURM:
+```shell
+sbatch -p idss-student --time 24:00:00 -N1 --exclude lab-al-7 -o logs.log -e err.log  ~/MGR/frams/run-vertpos-diploid-50.sh
+sbatch -p idss-student --time 24:00:00 -N1 --exclude lab-al-7 -o logs.log -e err.log  ~/MGR/frams/run-vertpos-haploid-100.sh
+
+sbatch -p idss-student --time 24:00:00 -N1 --exclude lab-al-7 -o logs.log -e err.log  ~/MGR/frams/run-velocity-diploid-50.sh
+sbatch -p idss-student --time 24:00:00 -N1 --exclude lab-al-7 -o logs.log -e err.log  ~/MGR/frams/run-velocity-haploid-100.sh
+```
+
+
 #### Velocity 50
 ```shell
 sbatch -p idss-student --time 24:00:00 -N1 --exclude lab-al-7 -o logs50.log -e err-logs50.log  ~/MGR/frams/run-velocity-50.sh

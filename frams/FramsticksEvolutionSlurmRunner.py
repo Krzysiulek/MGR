@@ -7,27 +7,25 @@ import FramsticksHaploidEvolution as haploid
 from FramsticksEvolutionCommon import parseArguments
 
 DETERMINISTIC = False
-MAX_ITERS = 2000000
-MIN_ITERS = 2000000
 
 
-def haploid_function(parsed_args, p_cx, p_mut):
+def haploid_function(parsed_args, p_cx, p_mut, iters):
     experiment_start_time = datetime.now()
     haploid.run(parsed_args=parsed_args,
                 deterministic=DETERMINISTIC,
-                max_iters_limit=MAX_ITERS,
-                min_iters_limit=MIN_ITERS,
+                max_iters_limit=iters,
+                min_iters_limit=iters,
                 experiment_start_time=experiment_start_time,
                 p_cx=p_cx,
                 p_mut=p_mut)
 
 
-def diploid_function(parsed_args, p_cx, p_mut):
+def diploid_function(parsed_args, p_cx, p_mut, iters):
     experiment_start_time = datetime.now()
     diploid.run(parsed_args=parsed_args,
                 deterministic=DETERMINISTIC,
-                max_iters_limit=MAX_ITERS,
-                min_iters_limit=MIN_ITERS,
+                max_iters_limit=iters,
+                min_iters_limit=iters,
                 experiment_start_time=experiment_start_time,
                 p_cx=p_cx,
                 p_mut=p_mut)
@@ -44,8 +42,9 @@ if __name__ == "__main__":
     p_mut = 0.9
 
     task = parsed_args.task
+    iters = parsed_args.iters
 
     if task == "haploid":
-        haploid_function(parsed_args, p_cross, p_mut)
+        haploid_function(parsed_args, p_cross, p_mut, iters)
     elif task == "diploid":
-        diploid_function(parsed_args, p_cross, p_mut)
+        diploid_function(parsed_args, p_cross, p_mut, iters)

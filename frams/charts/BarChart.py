@@ -15,12 +15,21 @@ for dir in get_all_dirs_in(rootdir):
     popsize = None
 
     for file in get_all_files_in_dir(dir):
-        data = get_data(dir, file)
+        try:
+            data = get_data(dir, file)
+        except:
+            print("EXCEPTION")
+
         p_cx = data["metadata"]["p_cx"]
         p_mut = data["metadata"]["p_mut"]
         popsize = data["metadata"]["population_size"]
         type_of_data = data["metadata"]["type"]
-        v = data["metadata"]["hof"][0]["vertpos"]
+
+        if "velocity" in data["metadata"]["hof"][0]:
+            v = data["metadata"]["hof"][0]["velocity"]
+        elif "vertpos" in data["metadata"]["hof"][0]:
+            v = data["metadata"]["hof"][0]["vertpos"]
+        # v = data["metadata"]["hof"][0]["vertpos"]
 
         if type_of_data == "Haploid":
             haploid_velocity.append(v)

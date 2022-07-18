@@ -18,7 +18,11 @@ plt.rcParams["figure.autolayout"] = True
 
 def get_max_of_files(data):
     max_x = data["logs"][-1]["trained_pop"]
-    max_y = data["metadata"]["hof"][0]["vertpos"]
+
+    if "velocity" in data["metadata"]["hof"][0]:
+        max_y = data["metadata"]["hof"][0]["velocity"]
+    elif "vertpos" in data["metadata"]["hof"][0]:
+        max_y = data["metadata"]["hof"][0]["vertpos"]
 
     return max_x, max_y
 
@@ -84,8 +88,8 @@ for dir in get_all_dirs_in(rootdir):
         if y > max_y:
             max_y = y
 
-    plt.xticks(np.arange(0, roundup(max_x), roundup(max_x / 10, 1000)))
-    plt.yticks(np.arange(0, max_y * 1.1, max_y / 10))
+    # plt.xticks(np.arange(0, roundup(max_x), roundup(max_x / 10, 1000)))
+    # plt.yticks(np.arange(0, max_y * 1.1, max_y / 10))
     plt.xlabel(f"{dir}")
 
     plt.savefig(f'{dir}/all-logs-chart.png')
