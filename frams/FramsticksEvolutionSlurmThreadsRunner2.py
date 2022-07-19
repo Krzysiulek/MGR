@@ -7,6 +7,7 @@ from datetime import datetime
 import FramsticksDiploidEvolutionTasks as diploid
 import FramsticksHaploidEvolutionTasks as haploid
 from FramsticksEvolutionCommon import parseArguments
+import time
 
 DETERMINISTIC = False
 MAX_ITERS = None
@@ -142,8 +143,17 @@ if __name__ == "__main__":
     print("Argument values:", ", ".join(['%s=%s' % (arg, getattr(parsed_args, arg)) for arg in vars(parsed_args)]))
 
     jobs_root_dir = "jobs"
-    while True:
+
+    start = time.time()
+
+    while ((time.time() - start) / 3600) < 23:
+        print(f"Job is running: {((time.time() - start) / 3600)}h")
         files = get_all_files_in_dir_sorted(jobs_root_dir)
+
+        if len(files) == 0:
+            print(f"Stopping job. No tasks available")
+            break
+
         now = datetime.now()
         now_formatted_str = str(now.strftime("%d-%m-%Y-%H-%M-%S.%f"))
 
@@ -198,7 +208,6 @@ if __name__ == "__main__":
 
         task_data["pop_made"] = logs[-1]["trained_pop"]
 
-        # todo save
         with open(f"{jobs_root_dir}/{locked_file_name}", 'w') as fout:
             json.dump(task_data, fout)
 
@@ -208,3 +217,5 @@ if __name__ == "__main__":
                                                       pop_size=task_data["pop_made"])
 
         rename_file(jobs_root_dir, locked_file_name, new_unlocked_file_name)
+
+# todo: dodać jakoś kryterium stopu (oznaczanie jako finished)
