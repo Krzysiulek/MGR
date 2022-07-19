@@ -96,6 +96,17 @@ def get_max_in_hof(hof):
             max_hof = max(ind.fitness.values)
     return max_hof
 
+def get_hof_additional_informations(framsLib, hof):
+    if framsLib is None:
+        return []
+
+    properties = []
+
+    for item in hof.items[0]:
+        properties.append(framsLib.evaluate([item])[0]['evaluations'][''])
+
+    return properties
+
 
 def get_metadata(pop_size=0,
                  type="",
@@ -106,7 +117,8 @@ def get_metadata(pop_size=0,
                  initial_genotype="",
                  sim="",
                  max_numgenochars=None,
-                 max_numparts=None):
+                 max_numparts=None,
+                 framsLib=None):
     return {
         "type": type,
         "population_size": pop_size,
@@ -116,7 +128,8 @@ def get_metadata(pop_size=0,
         "initial_genotype": initial_genotype,
         "sim": sim,
         "max_numgenochars": max_numgenochars,
-        "max_numparts": max_numparts
+        "max_numparts": max_numparts,
+        "hof_all_properties": get_hof_additional_informations(framsLib=framsLib, hof=hof)
     }
 
 
@@ -151,7 +164,8 @@ def save_logs(log,
               initial_genotype=None,
               sim=None,
               max_numgenochars=None,
-              max_numparts=None
+              max_numparts=None,
+              framsLib=None
               ):
     dict_to_save = {}
     dict_to_save["metadata"] = get_metadata(pop_size=popsize,
@@ -163,7 +177,8 @@ def save_logs(log,
                                             initial_genotype=initial_genotype,
                                             sim=sim,
                                             max_numgenochars=max_numgenochars,
-                                            max_numparts=max_numparts)
+                                            max_numparts=max_numparts,
+                                            framsLib=framsLib)
     dict_to_save["logs"] = get_population_logs(log, popsize)
 
     if isinstance(experiment_start_time, str):

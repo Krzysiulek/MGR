@@ -188,7 +188,8 @@ def run(parsed_args,
               initial_genotype=parsed_args.initialgenotype,
               sim=parsed_args.sim,
               max_numgenochars=parsed_args.max_numgenochars,
-              max_numparts=parsed_args.max_numparts)
+              max_numparts=parsed_args.max_numparts,
+              framsLib=framsLib)
 
     print_best_individuals(hof)
 

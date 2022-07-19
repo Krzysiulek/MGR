@@ -137,6 +137,9 @@ def run(parsed_args,
                                        verbose=True)
     log = append_logs(log, tmp_log)
 
+
+    # todo do save logs
+    # framsLib.evaluate(hof.items[0])[0]['evaluations']['']
     save_logs(log=log,
               popsize=parsed_args.popsize,
               type="Haploid",
@@ -148,7 +151,8 @@ def run(parsed_args,
               initial_genotype=parsed_args.initialgenotype,
               sim=parsed_args.sim,
               max_numgenochars=parsed_args.max_numgenochars,
-              max_numparts=parsed_args.max_numparts)
+              max_numparts=parsed_args.max_numparts,
+              framsLib=framsLib)
 
     print_best_individuals(hof)
 
