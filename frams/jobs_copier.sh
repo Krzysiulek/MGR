@@ -2,7 +2,7 @@
 
 mkdir -p jobs
 
-for i in {1..5}
+for i in {1..40}
 do
   cp jobstocopy/locked_0_velocity-diploid-cx_do_kopiowania.json jobs/ready_"${i}"_velocity-diploid-cx_0.json
   cp jobstocopy/locked_0_velocity-diploid-nocx_do_kopiowania.json jobs/ready_"${i}"_velocity-diploid-nocx_0.json
