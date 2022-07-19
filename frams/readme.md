@@ -43,6 +43,10 @@ sbatch -p idss-student --time 24:00:00 -N1 --exclude lab-al-7 -o logs.log -e err
 sbatch -p idss-student --time 24:00:00 -N1 --exclude lab-al-7 -o logs.log -e err.log  ~/MGR/frams/run-velocity-haploid-100.sh
 ```
 
+```shell
+sbatch -p idss-student --time 24:00:00 -N1 --exclude lab-al-7 -o queuelogs.log -e queueerr.log  ~/MGR/frams/run-queue.sh
+```
+
 
 #### Velocity 50
 ```shell
