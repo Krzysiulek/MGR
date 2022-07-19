@@ -138,8 +138,6 @@ def run(parsed_args,
     log = append_logs(log, tmp_log)
 
 
-    # todo do save logs
-    # framsLib.evaluate(hof.items[0])[0]['evaluations']['']
     save_logs(log=log,
               popsize=parsed_args.popsize,
               type="Haploid",
