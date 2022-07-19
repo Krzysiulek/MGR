@@ -1,6 +1,7 @@
 {
   "name": "Diploid",
-  "pop_made": 30,
+  "pop_made": 0,
+  "max_pop_to_make": 2000000,
   "experiment_start_time": "",
   "params": {
     "pmut": 0.9,
@@ -12,7 +13,7 @@
     "max_numgenochars": 1000,
     "initialgenotype": "X",
     "popsize": 50,
-    "generations": 500,
+    "generations": 250,
     "hof_size": 1
   },
   "history": {

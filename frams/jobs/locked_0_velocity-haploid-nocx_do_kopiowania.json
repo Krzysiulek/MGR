@@ -1,0 +1,24 @@
+{
+  "name": "Haploid",
+  "pop_made": 0,
+  "max_pop_to_make": 4000000,
+  "experiment_start_time": "",
+  "params": {
+    "pmut": 0.9,
+    "pxov": 0,
+    "path": "/home/inf136224/MGR/Framsticks50rc20",
+    "sim": "eval-allcriteria-mini.sim;deterministic.sim;sample-period-longest.sim",
+    "opt": "velocity",
+    "max_numparts": 30,
+    "max_numgenochars": 1000,
+    "initialgenotype": "X",
+    "popsize": 100,
+    "generations": 250,
+    "hof_size": 1
+  },
+  "history": {
+    "pop_path": "",
+    "hof_path": "",
+    "log_path": ""
+  }
+}

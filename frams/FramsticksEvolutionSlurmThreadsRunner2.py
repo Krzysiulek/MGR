@@ -66,6 +66,9 @@ def store_model(model_class, path):
     pickle.dump(model_class, f)
     f.close()
 
+def remove_file(path):
+    os.remove(path)
+
 
 def create_new_file_name(filename, state, time_as_str, pop_size=None):
     splitted_filename = filename.split("_")
@@ -126,6 +129,14 @@ def get_pickle_models(pop_path, hof_path, log_path):
     hof = load_model(hof_path)
     logs = load_model(log_path)
     return pop, hof, logs
+
+
+def get_file_state(pop_made, task_data):
+    if pop_made >= task_data["max_pop_to_make"]:
+        state = "finished"
+    else:
+        state = "ready"
+    return state
 
 
 def get_pickle_file_paths(task_data):
@@ -206,16 +217,21 @@ if __name__ == "__main__":
         store_model(hof, task_data["history"]["hof_path"])
         store_model(logs, task_data["history"]["log_path"])
 
-        task_data["pop_made"] = logs[-1]["trained_pop"]
+        pop_made = logs[-1]["trained_pop"]
+        task_data["pop_made"] = pop_made
+
+        new_file_state = get_file_state(pop_made=pop_made, task_data=task_data)
+        if new_file_state == "finished":
+            remove_file(task_data["history"]["pop_path"])
+            remove_file(task_data["history"]["hof_path"])
+            remove_file(task_data["history"]["log_path"])
 
         with open(f"{jobs_root_dir}/{locked_file_name}", 'w') as fout:
             json.dump(task_data, fout)
 
         new_unlocked_file_name = create_new_file_name(filename=locked_file_name,
-                                                      state="ready",
+                                                      state=new_file_state,
                                                       time_as_str=now_formatted_str,
                                                       pop_size=task_data["pop_made"])
 
         rename_file(jobs_root_dir, locked_file_name, new_unlocked_file_name)
-
-# todo: dodać jakoś kryterium stopu (oznaczanie jako finished)
