@@ -42,4 +42,5 @@ def get_all_files_in_dir(dir):
 def get_data(dir, filename):
     f = open(f"{dir}/{filename}")
     data = load_json(file=f)
+
     return data

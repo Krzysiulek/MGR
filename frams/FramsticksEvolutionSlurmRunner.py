@@ -38,8 +38,8 @@ if __name__ == "__main__":
     parsed_args = parseArguments(parser=parser)
     print("Argument values:", ", ".join(['%s=%s' % (arg, getattr(parsed_args, arg)) for arg in vars(parsed_args)]))
 
-    p_cross = 0.2
-    p_mut = 0.9
+    p_cross = parsed_args.pxov
+    p_mut = parsed_args.pmut
 
     task = parsed_args.task
     iters = parsed_args.iters

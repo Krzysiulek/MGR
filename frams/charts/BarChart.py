@@ -13,6 +13,7 @@ for dir in get_all_dirs_in(rootdir):
     p_cx = None
     p_mut = None
     popsize = None
+    fitness_type = ""
 
     for file in get_all_files_in_dir(dir):
         try:
@@ -26,8 +27,10 @@ for dir in get_all_dirs_in(rootdir):
         type_of_data = data["metadata"]["type"]
 
         if "velocity" in data["metadata"]["hof"][0]:
+            fitness_type = "Velocity"
             v = data["metadata"]["hof"][0]["velocity"]
         elif "vertpos" in data["metadata"]["hof"][0]:
+            fitness_type = "Vertpos"
             v = data["metadata"]["hof"][0]["vertpos"]
         # v = data["metadata"]["hof"][0]["vertpos"]
 
@@ -47,12 +50,12 @@ for dir in get_all_dirs_in(rootdir):
     })
 
     fig1, ax = plt.subplots()
-    title = f"Haploid vs diploid. p_cx={p_cx} pmut={p_mut}. Popsize={popsize}"
+    title = f"Comparison of Haploid and Diploid genotypes in {fitness_type} fitness function."
     ax.set_title(title)
     ax.boxplot([haploid_velocity, diploid_velocity], notch=True)
-    ax.set_ylabel("Fitness (velocity)")
+    ax.set_ylabel(f"Fitness ({fitness_type})")
     plt.xticks([1, 2], ['Haploid', 'Diploid'])
-    plt.xlabel(f"{dir}")
+    plt.xlabel(f"Number of fitness function executions. \n Diploid population size is 50. \n Haploid population size is 100.")
     plt.savefig(f'{dir}/boxplot-chart.png')
     # plt.show()
 

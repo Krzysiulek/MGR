@@ -6,6 +6,11 @@ import numpy as np
 
 def load_json(file):
     data = json.load(file)
+
+    if data['metadata']['type'] == 'Diploid':
+        for el in data['logs']:
+            el['trained_pop'] = el['trained_pop'] * 2
+
     return data
 
 

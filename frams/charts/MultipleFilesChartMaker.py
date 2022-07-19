@@ -88,8 +88,6 @@ for dir in get_all_dirs_in(rootdir):
         if y > max_y:
             max_y = y
 
-    # plt.xticks(np.arange(0, roundup(max_x), roundup(max_x / 10, 1000)))
-    # plt.yticks(np.arange(0, max_y * 1.1, max_y / 10))
     plt.xlabel(f"{dir}")
 
     plt.savefig(f'{dir}/all-logs-chart.png')
