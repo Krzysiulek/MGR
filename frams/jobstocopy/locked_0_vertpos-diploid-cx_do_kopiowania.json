@@ -12,7 +12,7 @@
     "max_numparts": 30,
     "max_numgenochars": 1000,
     "initialgenotype": "X",
-    "popsize": 100,
+    "popsize": 50,
     "generations": 250,
     "hof_size": 1
   },
